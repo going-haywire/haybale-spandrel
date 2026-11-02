@@ -128,7 +128,7 @@ def test_unavailable_device_runs_on_cpu_with_a_warning(
     assert messages == ["cuda:1 not available — running on cpu"]
     assert load.status.loaded == "RealESRGAN Compact · 2x · RGB · cpu fp32"
     load.on_shutdown(MagicMock())
-    assert load.status.loaded == "loads on run"
+    assert load.status.loaded == importlib.import_module(LOAD[0]).NOT_LOADED
 
 
 def test_missing_model_is_an_error_with_a_warning(graph: Any, models_env: VolumeStore) -> None:

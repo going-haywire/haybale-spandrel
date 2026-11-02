@@ -115,8 +115,13 @@ def _run_passes(
     cancel: threading.Event | None,
     on_progress: Callable[[int, int], None] | None,
 ) -> Tensor:
+    height, width = int(t.shape[2]), int(t.shape[3])
     reached = 1.0
     while True:
+        if reached > 1 and reached * model.scale > target + 1e-9:
+            # The last pass would overshoot: shrink its input so it lands on the target,
+            # so no pass grows larger than the result.
+            t = _resize(t, (round(height * target / model.scale), round(width * target / model.scale)))
         tile = choose_tile(
             model, t.shape[3], t.shape[2], tile_setting=tile_setting, budget_bytes=budget_bytes
         )

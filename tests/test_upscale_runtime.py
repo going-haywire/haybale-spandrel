@@ -53,7 +53,25 @@ def test_scale_above_native_runs_twice_then_downsizes(sr2: SpandrelModel) -> Non
         mp.setattr(sr2.descriptor.__class__, "__call__", spy)
         out, _ = _run(_image(20, 30, 3), sr2, scale=3)
     assert (out.height, out.width) == (60, 90)
-    assert len(calls) == 2
+    # The second pass starts from a shrunk image so it lands on 3x, never on 4x.
+    assert calls == [(1, 3, 20, 30), (1, 3, 30, 45)]
+
+
+def test_no_pass_outgrows_the_result(tiny_sr4_path: Path) -> None:
+    model = load_model(tiny_sr4_path, CPU, "fp32")
+    outputs: list[tuple[int, int]] = []
+    original = model.descriptor.__class__.__call__
+
+    def spy(self: object, t: torch.Tensor) -> torch.Tensor:
+        out = original(self, t)  # type: ignore[arg-type]
+        outputs.append((int(out.shape[2]), int(out.shape[3])))
+        return out
+
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(model.descriptor.__class__, "__call__", spy)
+        out, _ = _run(_image(20, 30, 3), model, scale=8)
+    assert (out.height, out.width) == (160, 240)
+    assert outputs == [(80, 120), (160, 240)]
 
 
 def test_fractional_scale(sr2: SpandrelModel) -> None:
