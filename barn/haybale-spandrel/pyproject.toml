@@ -1,0 +1,37 @@
+# Full field reference: docs/reference/files/pyproject-toml.md
+[project]
+# ── generated from haybale.toml at publish; hand-edits are reported as drift ─
+name = "haybale-spandrel"  # from haybale.name
+description = "Upscale and restore images with PyTorch models (spandrel)"  # from haybale.description
+keywords = ["image", "models", "upscale", "torch"]  # from haybale.tags
+
+# CANON, but owned by the release machinery — synced to haybale.toml
+version = "0.0.1"
+
+# ── authored here ────────────────────────────────────────────────────────────
+requires-python = ">=3.12"
+license = {text = "MIT"}
+
+# CANON — pip requirements. Add third-party packages and sibling haybales here.
+dependencies = [
+    "haywire-core>=0.3.0",
+    "haybale-core>=0.3.0",
+    "haybale-image>=0.3.0",
+    "haybale-models>=0.3.0",
+    "spandrel>=0.4.2",
+    "torch",
+]
+
+# The key is the entry-point name (unique within the group; need not match the
+# library id). The value is <module>:<class>.
+[project.entry-points."haywire.libraries"]
+spandrel = "haybale_spandrel:Library"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# Declares the package DIRECTORY, so everything not VCS-ignored inside it
+# reaches the wheel, including haybale.toml — do not add include/exclude here.
+[tool.hatch.build.targets.wheel]
+packages = ["haybale_spandrel"]
