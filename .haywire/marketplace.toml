@@ -1,6 +1,6 @@
 [[heaps]]
-name = "hay-spandrel"
-path = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haybale-spandrel/barn/hay-spandrel"
+name = "haybale-spandrel"
+path = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haybale-spandrel/barn/haybale-spandrel"
 label = "Haybale Spandrel"
 description = "Local library for the haybale-spandrel project"
 
