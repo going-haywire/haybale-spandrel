@@ -128,7 +128,7 @@ def test_unavailable_device_runs_on_cpu_with_a_warning(
     assert messages == ["cuda:1 not available — running on cpu"]
     assert load.status.loaded == "RealESRGAN Compact · 2x · RGB · cpu fp32"
     load.on_shutdown(MagicMock())
-    assert load.status.loaded == ""
+    assert load.status.loaded == "loads on run"
 
 
 def test_missing_model_is_an_error_with_a_warning(graph: Any, models_env: VolumeStore) -> None:
@@ -167,3 +167,19 @@ def test_a_released_model_still_runs_for_whoever_holds_it(
 
     out, _ = upscale_image(ImageValue.from_array(np.zeros((8, 8, 3), np.float32)), held, budget_bytes=2**30)
     assert out.width == 16
+
+
+@pytest.mark.usefixtures("cpu_only")
+def test_changing_precision_loads_the_model_again(
+    graph: Any, models_env: VolumeStore, tiny_sr_path: Path
+) -> None:
+    load = add_node(graph, *LOAD)
+    load.ports["model"].set_value(place_model(tiny_sr_path))
+    load._execute(MagicMock())
+    assert load.ports["loaded"].get_value().dtype == torch.float32
+
+    load.settings.precision = "fp16"
+    load._execute(MagicMock())  # no port is dirty: only the setting changed
+    assert load.ports["loaded"].get_value().dtype == torch.float16
+    assert load.status.loaded.endswith("cpu fp16")
+    assert [e.key[1] for e in _pool().entries()] == [("cpu", "fp16")]

@@ -22,6 +22,9 @@ from haybale_spandrel.settings.spandrel_settings import SpandrelSettings
 #: Warning kind of the device and precision notes on the card.
 KIND = "spandrel"
 
+#: The card line while no model is loaded.
+NOT_LOADED = "< shows after the first run >"
+
 #: Variants Load Model prefers from a catalog entry: PyTorch weights, safetensors first.
 PREFER = [{"platform": "pytorch", "type": "safetensors"}, {"platform": "pytorch"}]
 
@@ -37,7 +40,7 @@ class LoadModelStatus(NodeSettings):
     """What the node loaded, shown on its card."""
 
     loaded = setting[STRING](
-        "",
+        NOT_LOADED,
         label="Loaded",
         description="Architecture, scale, channels, device and precision of the loaded model",
         widget=SimpleLabelWidget.config(),
@@ -89,6 +92,13 @@ class LoadModelNode(BaseNode):
         )
         self.add(MODEL.as_outlet("loaded", label="Model"))
 
+    def post_init(self) -> None:
+        self.settings._subscribe(self._on_settings_changed)
+
+    def _on_settings_changed(self, name: str, value: Any, old: Any) -> None:
+        """A new device or precision needs another load: run at the next execution."""
+        self.run_again()
+
     def worker(self, context: ExecutionContext, model: ModelRef) -> None:
         device, device_note = resolve_device(str(self.settings.device))
         precision = str(self.settings.precision)
@@ -130,7 +140,7 @@ class LoadModelNode(BaseNode):
         except RuntimeError:
             pass  # haybale-models already disabled: its pool released everything
         try:
-            self.status.loaded = ""
+            self.status.loaded = NOT_LOADED
         except Exception:  # noqa: BLE001
             pass
 
