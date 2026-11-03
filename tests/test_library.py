@@ -17,6 +17,9 @@ def test_library_settings_have_their_defaults(library_system: Any) -> None:
     assert bag.device == "auto"
     assert bag.precision == "auto"
     assert bag.memory_budget == 0.0
+    assert bag.noncommercial_architectures is False
+    description = type(bag).noncommercial_architectures._description
+    assert description.endswith("Applies from the next graph start.")
 
 
 def test_panel_is_registered_under_barns(library_system: Any) -> None:

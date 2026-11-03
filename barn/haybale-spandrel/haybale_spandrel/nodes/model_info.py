@@ -28,6 +28,8 @@ class ModelInfoNode(BaseNode):
     - `fp16`, `bf16`: whether the model can run in that precision.
     - `Min Size`, `Multiple Of`: input sizes the model needs; smaller or odd sizes
       are padded for it.
+    - `Non-commercial`: whether the architecture's code is licensed for
+      non-commercial use only.
     - `Device`, `Precision`: where and how this copy runs.
     - `Parameters`: the number of weights.
     """
@@ -79,6 +81,13 @@ class ModelInfoNode(BaseNode):
             )
         )
         self.add(
+            BOOL.as_outlet(
+                "noncommercial",
+                label="Non-commercial",
+                description="Whether the model's architecture is licensed for non-commercial use only",
+            )
+        )
+        self.add(
             STRING.as_outlet("device", label="Device", description="Where it runs, such as mps or cuda:0")
         )
         self.add(
@@ -102,6 +111,7 @@ class ModelInfoNode(BaseNode):
         self.out("supports_bf16", bool(model.descriptor.supports_bfloat16))
         self.out("min_size", int(req.minimum))
         self.out("multiple_of", int(req.multiple_of))
+        self.out("noncommercial", model.noncommercial)
         self.out("device", str(model.device))
         self.out("precision", dtype_name(model.dtype))
         self.out("parameters", model.parameters)

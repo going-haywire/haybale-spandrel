@@ -27,7 +27,7 @@ linked_libraries = ["haybale_models", "haybale_image"]
 # tests_path = "tests/"
 
 # One supplementary human-readable page: a bare filename in this directory.
-# notes = "NOTES.md"
+notes = "NOTES.md"
 
 # ── absolute URLs, used verbatim ─────────────────────────────────────────────
 # homepage_url = "https://example.com"

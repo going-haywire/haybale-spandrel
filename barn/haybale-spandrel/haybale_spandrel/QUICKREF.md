@@ -6,6 +6,9 @@
 - `haybale-spandrel:node:ModelInfoNode` — Spandrel Model Info — Tells what a loaded spandrel model is: architecture, purpose, scale, device, precision  _tags: model, info, scale, architecture, spandrel_
 - `haybale-spandrel:node:UpscaleImageNode` — Upscale Image — Enlarges or restores an image with a loaded model  _tags: upscale, super resolution, sr, enlarge, restore, esrgan, model, spandrel_
 
+## macro
+- `haybale-spandrel:macro:Upscaler` — Upscaler — 
+
 ## type
 - `haybale-spandrel:type:IMAGE_MODEL` — Image model — A loaded image-to-image model: upscaling and restoration
 - `haybale-spandrel:type:INPAINT_MODEL` — Inpainting model — A loaded model that fills a masked part of an image

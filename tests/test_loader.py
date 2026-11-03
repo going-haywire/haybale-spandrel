@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import importlib
+import subprocess
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -48,6 +50,48 @@ def test_garbage_file_is_unsupported(tmp_path: Path) -> None:
     save_file({"not.a.model": torch.zeros(3)}, str(path))
     with pytest.raises(spandrel.UnsupportedModelError):
         load_model(path, CPU, "auto")
+
+
+def test_extra_arch_loads_when_on(srformer_path: Path) -> None:
+    model = load_model(srformer_path, CPU, "auto", noncommercial=True)
+    assert model.architecture == "SRFormer"
+    assert model.licence == "CC BY-NC 4.0"
+    assert model.noncommercial
+    assert model.status().endswith(" · non-commercial")
+    assert any("CC BY-NC 4.0" in n and "non-commercial" in n for n in model.notes)
+
+
+def test_unsupported_while_off_names_the_setting(srformer_path: Path) -> None:
+    with pytest.raises(spandrel.UnsupportedModelError, match="Non-commercial architectures"):
+        load_model(srformer_path, CPU, "auto")
+
+
+def test_unsupported_says_what_failed(tmp_path: Path) -> None:
+    from safetensors.torch import save_file
+
+    path = tmp_path / "junk.safetensors"
+    save_file({"not.a.model": torch.zeros(3)}, str(path))
+    with pytest.raises(spandrel.UnsupportedModelError, match=r"^junk\.safetensors holds no architecture"):
+        load_model(path, CPU, "auto")
+    with pytest.raises(spandrel.UnsupportedModelError, match=r"^junk\.safetensors holds no architecture"):
+        load_model(path, CPU, "auto", noncommercial=True)
+
+
+def test_main_arch_is_not_marked(tiny_sr_path: Path) -> None:
+    model = load_model(tiny_sr_path, CPU, "auto", noncommercial=True)
+    assert model.licence is None
+    assert not model.noncommercial
+    assert model.status() == "RealESRGAN Compact · 2x · RGB · cpu fp32"
+
+
+def test_off_never_imports_extras(tiny_sr_path: Path) -> None:
+    code = (
+        "import sys; from pathlib import Path; import torch;"
+        "from haybale_spandrel.runtime.loader import load_model;"
+        f"load_model(Path({str(tiny_sr_path)!r}), torch.device('cpu'), 'auto');"
+        "assert not any(m.startswith('spandrel_extra_arches') for m in sys.modules)"
+    )
+    subprocess.run([sys.executable, "-c", code], check=True)
 
 
 def test_release_runs(tiny_sr_path: Path) -> None:

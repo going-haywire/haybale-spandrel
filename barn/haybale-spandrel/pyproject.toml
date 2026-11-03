@@ -19,6 +19,7 @@ dependencies = [
     "haybale-image>=0.3.0",
     "haybale-models>=0.3.0",
     "spandrel>=0.4.2",
+    "spandrel_extra_arches>=0.2.0",
     "torch",
 ]
 

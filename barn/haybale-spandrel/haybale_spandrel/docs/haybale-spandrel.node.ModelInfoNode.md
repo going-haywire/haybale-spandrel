@@ -19,6 +19,7 @@ Tells what a loaded spandrel model is: architecture, purpose, scale, device, pre
 | `supports_bf16` | outlet | `haywire-core:type:BOOL` | Whether it runs in bfloat16 |
 | `min_size` | outlet | `haywire-core:type:INT` | Smallest input side in pixels |
 | `multiple_of` | outlet | `haywire-core:type:INT` | Input sides must be a multiple of this |
+| `noncommercial` | outlet | `haywire-core:type:BOOL` | Whether the model's architecture is licensed for non-commercial use only |
 | `device` | outlet | `haywire-core:type:STRING` | Where it runs, such as mps or cuda:0 |
 | `precision` | outlet | `haywire-core:type:STRING` | Number format it runs in, such as fp16 |
 | `parameters` | outlet | `haywire-core:type:INT` | Number of weights |
@@ -36,5 +37,7 @@ Tells what a loaded model is.
 - `fp16`, `bf16`: whether the model can run in that precision.
 - `Min Size`, `Multiple Of`: input sizes the model needs; smaller or odd sizes
   are padded for it.
+- `Non-commercial`: whether the architecture's code is licensed for
+  non-commercial use only.
 - `Device`, `Precision`: where and how this copy runs.
 - `Parameters`: the number of weights.

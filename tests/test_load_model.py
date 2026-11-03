@@ -182,7 +182,72 @@ def test_changing_precision_loads_the_model_again(
     load._execute(MagicMock())  # no port is dirty: only the setting changed
     assert load.ports["loaded"].get_value().dtype == torch.float16
     assert load.status.loaded.endswith("cpu fp16")
-    assert [e.key[1] for e in _pool().entries()] == [("cpu", "fp16")]
+    assert [e.key[1] for e in _pool().entries()] == [("cpu", "fp16", False)]
+
+
+# ---------------------------------------------------------------- non-commercial architectures
+
+
+@pytest.fixture
+def noncommercial(library_system: Any) -> Any:
+    """Set the library's *Non-commercial architectures*: call with True/False; reset to off afterwards."""
+    settings = importlib.import_module("haybale_spandrel.settings.spandrel_settings").SpandrelSettings
+
+    def set_to(on: bool) -> None:
+        settings().noncommercial_architectures = on
+        assert settings().noncommercial_architectures is on  # a dropped write fails loudly
+
+    yield set_to
+    set_to(False)
+
+
+@pytest.mark.usefixtures("cpu_only")
+def test_toggle_changes_pool_key(
+    graph: Any, models_env: VolumeStore, tiny_sr_path: Path, noncommercial: Any
+) -> None:
+    load = add_loader(graph)
+    load.ports["model"].set_value(place_model(tiny_sr_path))
+    load._execute(MagicMock())
+    key_off = load.cache.key
+    load.on_shutdown(MagicMock())  # the setting applies from the next graph start
+    noncommercial(True)
+    load._execute(MagicMock())
+    key_on = load.cache.key
+    assert key_off[1][2] is False
+    assert key_on[1][2] is True
+    assert key_off[0] == key_on[0]
+    assert [e.key for e in _pool().entries()] == [key_on]
+    load.on_shutdown(MagicMock())
+
+
+@pytest.mark.usefixtures("cpu_only")
+def test_failed_model_loads_after_enabling(
+    graph: Any, models_env: VolumeStore, srformer_path: Path, noncommercial: Any
+) -> None:
+    import spandrel
+
+    load = add_loader(graph)
+    load.ports["model"].set_value(place_model(srformer_path))
+    with pytest.raises(spandrel.UnsupportedModelError, match="Non-commercial architectures"):
+        load._execute(MagicMock())
+    noncommercial(True)
+    load._execute(MagicMock())  # no graph edit: only the setting changed
+    assert load.status.loaded.endswith(" · non-commercial")
+    messages = [w.message for w in load.wrapper.state.warnings if w.kind == "spandrel"]
+    assert messages == ["SRFormer is non-commercial only (CC BY-NC 4.0)"]
+    load.on_shutdown(MagicMock())
+
+
+@pytest.mark.usefixtures("cpu_only")
+def test_model_info_reports_noncommercial(
+    graph: Any, models_env: VolumeStore, srformer_path: Path, tiny_sr_path: Path, noncommercial: Any
+) -> None:
+    noncommercial(True)
+    for path, expected in ((srformer_path, True), (tiny_sr_path, False)):
+        begin, load, info = _graph_with_info(graph)
+        load.ports["model"].set_value(place_model(path))
+        run_from(graph, begin)
+        assert info.ports["noncommercial"].get_value() is expected
 
 
 # ---------------------------------------------------------------- the outlet takes its kind

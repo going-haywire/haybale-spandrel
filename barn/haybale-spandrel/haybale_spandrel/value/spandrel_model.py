@@ -25,6 +25,7 @@ class SpandrelModel:
     dtype: torch.dtype
     name: str
     notes: tuple[str, ...] = ()
+    licence: str | None = None
     lock: threading.Lock = field(default_factory=threading.Lock)
 
     @property
@@ -63,6 +64,11 @@ class SpandrelModel:
         return self.descriptor.size_requirements
 
     @property
+    def noncommercial(self) -> bool:
+        """Whether the model's architecture is licensed for non-commercial use only."""
+        return self.licence is not None
+
+    @property
     def is_inpaint(self) -> bool:
         """Whether the model fills a masked region instead of mapping image to image."""
         return self.purpose == "Inpainting"
@@ -73,8 +79,12 @@ class SpandrelModel:
         return sum(p.numel() for p in self.descriptor.model.parameters())
 
     def status(self) -> str:
-        """One line for the card, e.g. ``ESRGAN · 4x · RGB · mps fp16``."""
+        """One line for the card, e.g. ``ESRGAN · 4x · RGB · mps fp16``.
+
+        A non-commercial architecture adds `` · non-commercial``.
+        """
         from haybale_spandrel.runtime.devices import dtype_name
 
         channels = _CHANNEL_NAMES.get(self.input_channels, f"{self.input_channels}ch")
-        return f"{self.architecture} · {self.scale}x · {channels} · {self.device} {dtype_name(self.dtype)}"
+        line = f"{self.architecture} · {self.scale}x · {channels} · {self.device} {dtype_name(self.dtype)}"
+        return f"{line} · non-commercial" if self.noncommercial else line

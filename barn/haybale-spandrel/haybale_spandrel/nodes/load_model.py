@@ -77,7 +77,11 @@ class LoadModelNode(BaseNode):
       it, else full. A precision the model cannot run falls back to fp32, with a
       note.
 
-    Both default to the library's *Spandrel* settings. Nodes that pick the same
+    - Models of the non-commercial architectures (CodeFormer, SRFormer, Restormer
+      and others) load only with the library setting *Non-commercial architectures*
+      on, and say so on the card: their code is licensed for non-commercial use only.
+
+    Device and precision default to the library's *Spandrel* settings. Nodes that pick the same
     model with the same device and precision share one loaded copy. The model is
     loaded when the graph runs and freed when it stops.
     """
@@ -157,18 +161,19 @@ class LoadModelNode(BaseNode):
             raise ValueError("connect the Model outlet first: it decides which kind of model to load")
         device, device_note = resolve_device(str(self.settings.device))
         precision = str(self.settings.precision)
+        noncommercial = bool(SpandrelSettings().noncommercial_architectures)
         try:
             resolved = resolve_port(self, "model")
         except Exception:
             self._let_go()
             raise
-        key = (resolved.key, (str(device), precision))
+        key = (resolved.key, (str(device), precision, noncommercial))
         if getattr(self.cache, "key", None) != key:
             self._let_go()
         loaded = models_state().pool.acquire(
             key,
             self,
-            load=lambda: load_model(resolved.path, device, precision),
+            load=lambda: load_model(resolved.path, device, precision, noncommercial=noncommercial),
             release=release_model,
         )
         self.cache.key = key

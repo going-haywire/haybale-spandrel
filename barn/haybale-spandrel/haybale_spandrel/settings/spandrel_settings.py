@@ -1,6 +1,6 @@
 """SpandrelSettings — library-wide device, precision and memory budget for spandrel models."""
 
-from haywire.barn.builtin.types import CHOICES, FLOAT
+from haywire.barn.builtin.types import BOOL, CHOICES, FLOAT
 from haywire.core.settings import LibrarySettings, setting, settings
 
 #: Suggested devices; any other torch device name (``cuda:3``) can be typed in.
@@ -38,4 +38,14 @@ class SpandrelSettings(LibrarySettings):
         description="Memory one model run may use, for choosing tile sizes; 0 derives it from the device",
         min=0.0,
         max=1024.0,
+    )
+    noncommercial_architectures = setting[BOOL](
+        False,
+        label="Non-commercial architectures",
+        description=(
+            "Also load AdaCode, CodeFormer, DDColor, FeMaSR, M3SNet, MAT, MIRNet2, MPRNet, Restormer "
+            "and SRFormer models. Their code is licensed for non-commercial use only (CC BY-NC, S-Lab, "
+            "Academic Public License); leave this off for commercial work. "
+            "Applies from the next graph start."
+        ),
     )

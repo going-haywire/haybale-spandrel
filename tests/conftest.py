@@ -142,6 +142,23 @@ def lama_path(model_dir: Path) -> Path:
     return path
 
 
+@pytest.fixture(scope="session")
+def srformer_path(model_dir: Path) -> Path:
+    """A tiny SRFormer (non-commercial architecture, 1x restoration) as ``.safetensors``."""
+    import importlib
+
+    import torch
+    from safetensors.torch import save_file
+
+    # The package folder is named ``__arch``, which ``from ... import`` cannot spell.
+    arch = importlib.import_module("spandrel_extra_arches.architectures.SRFormer.__arch.SRFormer")
+    torch.manual_seed(0)
+    path = model_dir / "srformer.safetensors"
+    model = arch.SRFormer(embed_dim=12, depths=[1], num_heads=[1])
+    save_file({k: v.contiguous() for k, v in model.state_dict().items()}, str(path))
+    return path
+
+
 def add_node(graph: Any, module: str, name: str) -> Any:
     """Place the node class *name* from *module* in *graph* and return the node."""
     import importlib

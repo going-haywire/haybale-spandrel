@@ -41,6 +41,10 @@ the file (`.pth`, `.safetensors`, `.ckpt`, `.pt`).
   it, else full. A precision the model cannot run falls back to fp32, with a
   note.
 
-Both default to the library's *Spandrel* settings. Nodes that pick the same
+- Models of the non-commercial architectures (CodeFormer, SRFormer, Restormer
+  and others) load only with the library setting *Non-commercial architectures*
+  on, and say so on the card: their code is licensed for non-commercial use only.
+
+Device and precision default to the library's *Spandrel* settings. Nodes that pick the same
 model with the same device and precision share one loaded copy. The model is
 loaded when the graph runs and freed when it stops.
