@@ -82,10 +82,15 @@ class UpscaleImageNode(BaseNode):
 
         from haybale_spandrel.types.model import MODEL
 
-        self.add(IMAGE.as_inlet("image", label="Image"))
-        self.add(MODEL.as_inlet("model", label="Model"))
+        self.add(IMAGE.as_inlet("image", label="Image", description="Image to process"))
+        self.add(MODEL.as_inlet("model", label="Model", description="A loaded image-to-image model"))
         self.add(
-            FLOAT.as_inlet("scale", label="Scale", default=0.0, description="0 = the model's own scale")
+            FLOAT.as_inlet(
+                "scale",
+                label="Scale",
+                default=0.0,
+                description="Size of the result relative to the input; 0 is the model's own scale",
+            )
         )
         self.add(
             STRING.as_config(
@@ -95,6 +100,7 @@ class UpscaleImageNode(BaseNode):
                 widget=SelectWidget.config(
                     properties={"options": list(TILE_SIZES), "new_value_mode": "add-unique"}
                 ),
+                description="Tile edge in pixels; auto fits the memory, none runs the whole image at once",
             )
         )
         self.add(
@@ -103,9 +109,10 @@ class UpscaleImageNode(BaseNode):
                 default="resize",
                 label="Alpha",
                 widget=SelectWidget.config(properties={"options": list(ALPHA_MODES)}),
+                description="Alpha channel: resize scales it smoothly, model runs it through the model",
             )
         )
-        self.add(IMAGE.as_outlet("out_image", label="Image"))
+        self.add(IMAGE.as_outlet("out_image", label="Image", description="The processed image"))
 
     def worker(
         self,

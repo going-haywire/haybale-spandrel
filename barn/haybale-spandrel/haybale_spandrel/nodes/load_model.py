@@ -88,9 +88,16 @@ class LoadModelNode(BaseNode):
                 "model",
                 label="Model",
                 widget_config={"properties": {"filter": {}, "prefer": PREFER}},
+                description="Model to load: a catalog entry or a file",
             )
         )
-        self.add(MODEL.as_outlet("loaded", label="Model"))
+        self.add(
+            MODEL.as_outlet(
+                "loaded",
+                label="Model",
+                description="The loaded model, for Upscale Image, Inpaint and Model Info",
+            )
+        )
 
     def post_init(self) -> None:
         self.settings._subscribe(self._on_settings_changed)

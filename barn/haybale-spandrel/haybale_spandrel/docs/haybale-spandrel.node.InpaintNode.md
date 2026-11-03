@@ -8,10 +8,10 @@ Fills the masked part of an image with a loaded inpainting model
 
 | id | direction | type | description |
 |---|---|---|---|
-| `image` | inlet | `haybale-image:type:IMAGE` | A picture of any channel layout. Pixels are kept as made and converted on demand. |
+| `image` | inlet | `haybale-image:type:IMAGE` | Image to fill |
 | `mask` | inlet | `haybale-image:type:IMAGE_GRAY` | White marks what to fill |
-| `model` | inlet | `haybale-spandrel:type:MODEL` | A model loaded on a device, ready to run. Never saved with the graph. |
-| `out_image` | outlet | `haybale-image:type:IMAGE` | A picture of any channel layout. Pixels are kept as made and converted on demand. |
+| `model` | inlet | `haybale-spandrel:type:MODEL` | A loaded inpainting model |
+| `out_image` | outlet | `haybale-image:type:IMAGE` | The filled image |
 
 ## Notes
 

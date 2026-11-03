@@ -32,10 +32,10 @@ class InpaintNode(BaseNode):
 
         from haybale_spandrel.types.model import MODEL
 
-        self.add(IMAGE.as_inlet("image", label="Image"))
+        self.add(IMAGE.as_inlet("image", label="Image", description="Image to fill"))
         self.add(IMAGE_GRAY.as_inlet("mask", label="Mask", description="White marks what to fill"))
-        self.add(MODEL.as_inlet("model", label="Model"))
-        self.add(IMAGE.as_outlet("out_image", label="Image"))
+        self.add(MODEL.as_inlet("model", label="Model", description="A loaded inpainting model"))
+        self.add(IMAGE.as_outlet("out_image", label="Image", description="The filled image"))
 
     def worker(
         self, context: ExecutionContext, image: ImageValue, mask: ImageValue, model: SpandrelModel | None

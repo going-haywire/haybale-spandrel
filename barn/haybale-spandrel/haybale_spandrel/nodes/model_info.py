@@ -37,20 +37,56 @@ class ModelInfoNode(BaseNode):
 
         from haybale_spandrel.types.model import MODEL
 
-        self.add(MODEL.as_inlet("model", label="Model"))
-        self.add(STRING.as_outlet("architecture", label="Architecture"))
-        self.add(STRING.as_outlet("purpose", label="Purpose"))
-        self.add(INT.as_outlet("scale", label="Scale"))
-        self.add(INT.as_outlet("input_channels", label="Input Channels"))
-        self.add(INT.as_outlet("output_channels", label="Output Channels"))
-        self.add(STRING.as_outlet("tiling", label="Tiling"))
-        self.add(BOOL.as_outlet("supports_fp16", label="fp16"))
-        self.add(BOOL.as_outlet("supports_bf16", label="bf16"))
-        self.add(INT.as_outlet("min_size", label="Min Size"))
-        self.add(INT.as_outlet("multiple_of", label="Multiple Of"))
-        self.add(STRING.as_outlet("device", label="Device"))
-        self.add(STRING.as_outlet("precision", label="Precision"))
-        self.add(INT.as_outlet("parameters", label="Parameters"))
+        self.add(MODEL.as_inlet("model", label="Model", description="Loaded model to describe"))
+        self.add(
+            STRING.as_outlet(
+                "architecture", label="Architecture", description="Architecture name, such as ESRGAN"
+            )
+        )
+        self.add(
+            STRING.as_outlet(
+                "purpose", label="Purpose", description="What the model does, such as SR or Inpainting"
+            )
+        )
+        self.add(INT.as_outlet("scale", label="Scale", description="Upscale factor; 1 for restoration"))
+        self.add(
+            INT.as_outlet(
+                "input_channels", label="Input Channels", description="Channels the model takes: 1, 3 or 4"
+            )
+        )
+        self.add(
+            INT.as_outlet(
+                "output_channels", label="Output Channels", description="Channels the model returns"
+            )
+        )
+        self.add(
+            STRING.as_outlet(
+                "tiling",
+                label="Tiling",
+                description="Whether it can run in tiles: SUPPORTED, DISCOURAGED or INTERNAL",
+            )
+        )
+        self.add(
+            BOOL.as_outlet(
+                "supports_fp16", label="fp16", description="Whether it runs in half precision (fp16)"
+            )
+        )
+        self.add(BOOL.as_outlet("supports_bf16", label="bf16", description="Whether it runs in bfloat16"))
+        self.add(INT.as_outlet("min_size", label="Min Size", description="Smallest input side in pixels"))
+        self.add(
+            INT.as_outlet(
+                "multiple_of", label="Multiple Of", description="Input sides must be a multiple of this"
+            )
+        )
+        self.add(
+            STRING.as_outlet("device", label="Device", description="Where it runs, such as mps or cuda:0")
+        )
+        self.add(
+            STRING.as_outlet(
+                "precision", label="Precision", description="Number format it runs in, such as fp16"
+            )
+        )
+        self.add(INT.as_outlet("parameters", label="Parameters", description="Number of weights"))
 
     def worker(self, context: ExecutionContext, model: SpandrelModel | None) -> None:
         if model is None:

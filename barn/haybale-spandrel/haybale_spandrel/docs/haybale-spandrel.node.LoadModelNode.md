@@ -8,9 +8,9 @@ Loads a model onto the GPU or CPU, ready for Upscale Image, Inpaint and Model In
 
 | id | direction | type | description |
 |---|---|---|---|
-| `model` | inlet | `haybale-models:type:MODEL_REF` | A model, named by a catalog entry or by a file (url and sha256). Resolve Model turns it into a path on disk. |
+| `model` | inlet | `haybale-models:type:MODEL_REF` | Model to load: a catalog entry or a file |
 | `status.loaded` | config | `haywire-core:type:STRING` | Architecture, scale, channels, device and precision of the loaded model |
-| `loaded` | outlet | `haybale-spandrel:type:MODEL` | A model loaded on a device, ready to run. Never saved with the graph. |
+| `loaded` | outlet | `haybale-spandrel:type:MODEL` | The loaded model, for Upscale Image, Inpaint and Model Info |
 
 ## Settings
 
@@ -18,7 +18,7 @@ Loads a model onto the GPU or CPU, ready for Upscale Image, Inpaint and Model In
 |---|---|---|---|
 | `device` | settings | `None` | Where models run: auto (CUDA, then Apple GPU, then CPU), cpu, mps, cuda or cuda:N; type another device and press Enter |
 | `precision` | settings | `None` | Number format the model computes in: auto picks the fastest the model and device support; a choice the model cannot run falls back to fp32 |
-| `loaded` | status | `''` | Architecture, scale, channels, device and precision of the loaded model |
+| `loaded` | status | `'< shows after the first run >'` | Architecture, scale, channels, device and precision of the loaded model |
 
 ## Notes
 
