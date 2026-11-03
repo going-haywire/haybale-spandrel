@@ -55,7 +55,7 @@ def parse_tile_size(text: str) -> int | None:
 class UpscaleImageNode(BaseNode):
     """Enlarges or restores an image with a loaded model.
 
-    Connect `Model` to Load Model. The result stays on the model's device, so a
+    Connect `Model` to Load Spandrel Model. The result stays on the model's device, so a
     following model step runs without copying.
 
     - `Scale`: size of the result relative to the image; `0` uses the model's own
@@ -124,7 +124,7 @@ class UpscaleImageNode(BaseNode):
         alpha: str,
     ) -> None:
         if model is None:
-            raise ValueError("no model — connect Load Model")
+            raise ValueError("no model — connect Load Spandrel Model")
         tile_setting = parse_tile_size(tile_size)
         budget = memory_budget_bytes(model.device, float(SpandrelSettings().memory_budget))
         with self.progress.busy("main", "upscaling") as span:

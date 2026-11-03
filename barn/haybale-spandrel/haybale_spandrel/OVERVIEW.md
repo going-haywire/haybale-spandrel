@@ -8,8 +8,8 @@ Upscale and restore images with PyTorch models (spandrel)
 - **Upscale Image** — Enlarges or restores an image with a loaded model
 
 ### Models
-- **Load Model** — Loads a model onto the GPU or CPU, ready for Upscale Image, Inpaint and Model Info
-- **Model Info** — Tells what a loaded model is: architecture, purpose, scale, channels, device and precision
+- **Load Spandrel Model** — Loads a spandrel (PyTorch image) model onto the GPU or CPU, for Upscale Image or Inpaint
+- **Spandrel Model Info** — Tells what a loaded spandrel model is: architecture, purpose, scale, device, precision
 
 ## Types
 - **Image model** — A loaded image-to-image model: upscaling and restoration

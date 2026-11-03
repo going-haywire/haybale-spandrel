@@ -1,4 +1,4 @@
-"""Model Info — the facts of a loaded model: architecture, scale, channels, device, precision."""
+"""Spandrel Model Info — the facts of a loaded model: architecture, scale, channels, device, precision."""
 
 from __future__ import annotations
 
@@ -10,8 +10,8 @@ from haybale_spandrel.value.spandrel_model import SpandrelModel
 
 
 @node(
-    label="Model Info",
-    description="Tells what a loaded model is: architecture, purpose, scale, channels, device and precision",
+    label="Spandrel Model Info",
+    description="Tells what a loaded spandrel model is: architecture, purpose, scale, device, precision",
     menu="models",
     search_tags=["model", "info", "scale", "architecture", "spandrel"],
     node_type=NodeType.DATA,
@@ -90,7 +90,7 @@ class ModelInfoNode(BaseNode):
 
     def worker(self, context: ExecutionContext, model: SpandrelModel | None) -> None:
         if model is None:
-            raise ValueError("no model — connect Load Model")
+            raise ValueError("no model — connect Load Spandrel Model")
         req = model.size_requirements
         self.out("architecture", model.architecture)
         self.out("purpose", model.purpose)

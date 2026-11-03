@@ -1,8 +1,8 @@
-# Model Info
+# Spandrel Model Info
 
 `haybale-spandrel:node:ModelInfoNode` · kind: node
 
-Tells what a loaded model is: architecture, purpose, scale, channels, device and precision
+Tells what a loaded spandrel model is: architecture, purpose, scale, device, precision
 
 ## Ports
 

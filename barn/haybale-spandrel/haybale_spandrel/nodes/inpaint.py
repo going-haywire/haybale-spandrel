@@ -22,7 +22,7 @@ from haybale_spandrel.value.spandrel_model import SpandrelModel
 class InpaintNode(BaseNode):
     """Fills the masked part of an image with a loaded inpainting model, such as LaMa.
 
-    Connect `Model` to Load Model. White in `Mask` marks what to fill; a mask of a
+    Connect `Model` to Load Spandrel Model. White in `Mask` marks what to fill; a mask of a
     different size is stretched to the image. The whole image runs at once, and
     transparency is kept as it was. A super-resolution model here is an error.
     """
@@ -41,7 +41,7 @@ class InpaintNode(BaseNode):
         self, context: ExecutionContext, image: ImageValue, mask: ImageValue, model: SpandrelModel | None
     ) -> None:
         if model is None:
-            raise ValueError("no model — connect Load Model")
+            raise ValueError("no model — connect Load Spandrel Model")
         try:
             result = inpaint_image(image, mask, model, cancel=context.cancel)
         except Cancelled:

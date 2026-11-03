@@ -1,14 +1,13 @@
-# Load Model
+# Load Spandrel Model
 
 `haybale-spandrel:node:LoadModelNode` · kind: node
 
-Loads a model onto the GPU or CPU, ready for Upscale Image, Inpaint and Model Info
+Loads a spandrel (PyTorch image) model onto the GPU or CPU, for Upscale Image or Inpaint
 
 ## Ports
 
 | id | direction | type | description |
 |---|---|---|---|
-| `model` | inlet | `haybale-models:type:MODEL_REF` | Model to load: a catalog entry or a file |
 | `status.loaded` | config | `haywire-core:type:STRING` | Architecture, scale, channels, device and precision of the loaded model |
 | `loaded` | outlet | `haywire-core:type:ADD` | Connect it to the node that runs the model; it takes that node's kind of model |
 
@@ -22,7 +21,14 @@ Loads a model onto the GPU or CPU, ready for Upscale Image, Inpaint and Model In
 
 ## Notes
 
-Loads a model onto the GPU or CPU, ready for Upscale Image, Inpaint and Model Info.
+Loads a spandrel (PyTorch image) model onto the GPU or CPU, for Upscale Image or Inpaint.
+
+Connect the `Model` outlet first, to the node that runs the model: the outlet
+takes the kind of model that node needs (an image model for Upscale Image, an
+inpainting model for Inpaint, any kind for Spandrel Model Info), and the
+`Model` picker appears, offering only models of that kind. The outlet keeps its
+kind until the node is reset. A model of another kind, picked as a file, is
+reported when it loads.
 
 Pick the model on the card: a catalog entry, or a file from the Models folder
 or the Hugging Face cache. A model that is not on this machine is an error
@@ -35,12 +41,6 @@ the file (`.pth`, `.safetensors`, `.ckpt`, `.pt`).
   it, else full. A precision the model cannot run falls back to fp32, with a
   note.
 
-Both default to the library's *Spandrel* settings. Load Model nodes that pick
-the same model with the same device and precision share one loaded copy. The
-model is loaded when the graph runs and freed when it stops.
-
-Connect the `Model` outlet first: it takes the kind of model the node it feeds
-needs (an image model for Upscale Image, an inpainting model for Inpaint), and
-the picker then offers only models of that kind. The outlet keeps its kind until
-the node is reset. A model of another kind, picked as a file, is reported when
-it loads.
+Both default to the library's *Spandrel* settings. Nodes that pick the same
+model with the same device and precision share one loaded copy. The model is
+loaded when the graph runs and freed when it stops.

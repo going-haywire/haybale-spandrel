@@ -20,8 +20,8 @@ from haybale_spandrel.value.spandrel_model import SpandrelModel
 class MODEL_BASE(PrimitiveType[SpandrelModel | None]):
     """A model loaded on a device in a precision, ready to run, of any kind.
 
-    Model Info takes any loaded model through it. Upscale Image and Inpaint take
-    one kind each (`IMAGE_MODEL`, `INPAINT_MODEL`), so a Load Model wired to them
+    Spandrel Model Info takes any loaded model through it. Upscale Image and Inpaint take
+    one kind each (`IMAGE_MODEL`, `INPAINT_MODEL`), so a Load Spandrel Model wired to them
     becomes that kind and offers only the models that fit.
     """
 
@@ -94,7 +94,7 @@ class INPAINT_MODEL(MODEL_BASE):
 
 
 class MODELField(PrimitiveField):
-    """DataField for the model types: holds a ``SpandrelModel``, or ``None`` until Load Model has run."""
+    """DataField for the model types: a ``SpandrelModel``, or ``None`` until Load Spandrel Model ran."""
 
     def __post_init__(self) -> None:
         super().__post_init__()

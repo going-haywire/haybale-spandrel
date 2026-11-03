@@ -12,7 +12,7 @@ PRECISIONS = ("auto", "fp32", "fp16", "bf16")
 
 @settings(namespace="spandrel", label="Spandrel", description="Device, precision and memory for models")
 class SpandrelSettings(LibrarySettings):
-    """Where and how spandrel models run; Load Model can change device and precision per node."""
+    """Where and how spandrel models run; Load Spandrel Model can change device and precision per node."""
 
     device = setting[CHOICES](
         "auto",

@@ -1,4 +1,4 @@
-"""Load Model — load a picked model onto a device, ready for Upscale Image, Inpaint and Model Info."""
+"""Load Spandrel Model — load a picked spandrel model onto a device, for Upscale Image and Inpaint."""
 
 from __future__ import annotations
 
@@ -25,15 +25,12 @@ KIND = "spandrel"
 #: The card line while no model is loaded.
 NOT_LOADED = "< shows after the first run >"
 
-#: Variants Load Model prefers from a catalog entry: PyTorch weights, safetensors first.
+#: Variants Load Spandrel Model prefers from a catalog entry: PyTorch weights, safetensors first.
 PREFER = [{"platform": "pytorch", "type": "safetensors"}, {"platform": "pytorch"}]
-
-#: The picker's tooltip while the outlet has no kind yet.
-UNAVAILABLE = "Connect the Model outlet to choose a model"
 
 
 class LoadModelSettings(NodeSettings):
-    """Device and precision of one Load Model node."""
+    """Device and precision of one Load Spandrel Model node."""
 
     device = shadow(SpandrelSettings.device)
     precision = shadow(SpandrelSettings.precision)
@@ -53,14 +50,21 @@ class LoadModelStatus(NodeSettings):
 
 
 @node(
-    label="Load Model",
-    description="Loads a model onto the GPU or CPU, ready for Upscale Image, Inpaint and Model Info",
+    label="Load Spandrel Model",
+    description="Loads a spandrel (PyTorch image) model onto the GPU or CPU, for Upscale Image or Inpaint",
     menu="models",
-    search_tags=["model", "load", "spandrel", "upscale", "esrgan", "pytorch", "torch", "gpu"],
+    search_tags=["model", "load", "load model", "spandrel", "upscale", "esrgan", "pytorch", "torch", "gpu"],
     node_type=NodeType.DATA,
 )
 class LoadModelNode(BaseNode):
-    """Loads a model onto the GPU or CPU, ready for Upscale Image, Inpaint and Model Info.
+    """Loads a spandrel (PyTorch image) model onto the GPU or CPU, for Upscale Image or Inpaint.
+
+    Connect the `Model` outlet first, to the node that runs the model: the outlet
+    takes the kind of model that node needs (an image model for Upscale Image, an
+    inpainting model for Inpaint, any kind for Spandrel Model Info), and the
+    `Model` picker appears, offering only models of that kind. The outlet keeps its
+    kind until the node is reset. A model of another kind, picked as a file, is
+    reported when it loads.
 
     Pick the model on the card: a catalog entry, or a file from the Models folder
     or the Hugging Face cache. A model that is not on this machine is an error
@@ -73,15 +77,9 @@ class LoadModelNode(BaseNode):
       it, else full. A precision the model cannot run falls back to fp32, with a
       note.
 
-    Both default to the library's *Spandrel* settings. Load Model nodes that pick
-    the same model with the same device and precision share one loaded copy. The
-    model is loaded when the graph runs and freed when it stops.
-
-    Connect the `Model` outlet first: it takes the kind of model the node it feeds
-    needs (an image model for Upscale Image, an inpainting model for Inpaint), and
-    the picker then offers only models of that kind. The outlet keeps its kind until
-    the node is reset. A model of another kind, picked as a file, is reported when
-    it loads.
+    Both default to the library's *Spandrel* settings. Nodes that pick the same
+    model with the same device and precision share one loaded copy. The model is
+    loaded when the graph runs and freed when it stops.
     """
 
     settings = bag(LoadModelSettings)
@@ -90,7 +88,6 @@ class LoadModelNode(BaseNode):
     def init(self) -> None:
         from haywire.barn.builtin.types import ADD
 
-        self._add_model_inlet(None)
         self.add(
             ADD.as_outlet(
                 "loaded",
@@ -127,15 +124,10 @@ class LoadModelNode(BaseNode):
         self.wrapper.redraw()
 
     def _add_model_inlet(self, kind: Any) -> None:
-        """Add the model picker: unavailable while *kind* is ``None``, else filtered to models of *kind*."""
+        """Add the model picker, offering the catalog entries of *kind*."""
         from haybale_models.types.model_ref import MODEL_REF
 
-        properties: dict[str, Any] = {
-            "filter": dict(getattr(kind, "catalog_filter", None) or {}),
-            "prefer": PREFER,
-        }
-        if kind is None:
-            properties["unavailable"] = UNAVAILABLE
+        properties = {"filter": dict(kind.catalog_filter or {}), "prefer": PREFER}
         self.add(
             MODEL_REF.as_inlet(
                 "model",

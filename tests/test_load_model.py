@@ -204,7 +204,7 @@ def test_a_new_loader_has_an_open_outlet_and_no_picker(graph: Any) -> None:
     load = add_node(graph, *LOAD)
 
     assert _kind(load) == "ADD"
-    assert _picker(load)["unavailable"]
+    assert "model" not in load.ports
 
 
 def test_the_outlet_takes_the_kind_its_consumer_needs(graph: Any) -> None:
@@ -212,20 +212,6 @@ def test_the_outlet_takes_the_kind_its_consumer_needs(graph: Any) -> None:
 
     assert _kind(load) == "IMAGE_MODEL"
     assert _picker(load)["filter"] == {"purpose": ["SR", "FaceSR", "Restoration"]}
-    assert "unavailable" not in _picker(load)
-
-
-def test_the_picker_keeps_a_model_set_before_the_outlet_was_connected(
-    graph: Any, models_env: VolumeStore, tiny_sr_path: Path
-) -> None:
-    load = add_node(graph, *LOAD)
-    ref = place_model(tiny_sr_path)
-    load.ports["model"].set_value(ref)
-    upscale = add_node(graph, *UPSCALE)
-
-    graph.create_edge_wrapper(load.node_id, "loaded", upscale.node_id, "model")
-
-    assert load.ports["model"].get_value() == ref
 
 
 def test_model_info_takes_any_kind_and_filters_nothing(graph: Any) -> None:
@@ -233,7 +219,6 @@ def test_model_info_takes_any_kind_and_filters_nothing(graph: Any) -> None:
 
     assert _kind(load) == "MODEL_BASE"
     assert _picker(load)["filter"] == {}
-    assert "unavailable" not in _picker(load)
 
 
 def test_the_outlet_keeps_its_kind_when_unwired_and_rewired(graph: Any) -> None:

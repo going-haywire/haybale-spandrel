@@ -26,7 +26,7 @@ Enlarges or restores an image with a loaded model
 
 Enlarges or restores an image with a loaded model.
 
-Connect `Model` to Load Model. The result stays on the model's device, so a
+Connect `Model` to Load Spandrel Model. The result stays on the model's device, so a
 following model step runs without copying.
 
 - `Scale`: size of the result relative to the image; `0` uses the model's own

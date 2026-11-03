@@ -14,6 +14,6 @@ A model loaded on a device, ready to run. Never saved with the graph.
 
 A model loaded on a device in a precision, ready to run, of any kind.
 
-Model Info takes any loaded model through it. Upscale Image and Inpaint take
-one kind each (`IMAGE_MODEL`, `INPAINT_MODEL`), so a Load Model wired to them
+Spandrel Model Info takes any loaded model through it. Upscale Image and Inpaint take
+one kind each (`IMAGE_MODEL`, `INPAINT_MODEL`), so a Load Spandrel Model wired to them
 becomes that kind and offers only the models that fit.

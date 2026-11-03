@@ -6,4 +6,4 @@ Device, precision and memory for models
 
 ## Notes
 
-Where and how spandrel models run; Load Model can change device and precision per node.
+Where and how spandrel models run; Load Spandrel Model can change device and precision per node.
