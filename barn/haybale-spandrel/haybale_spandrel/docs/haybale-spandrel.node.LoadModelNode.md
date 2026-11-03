@@ -10,7 +10,7 @@ Loads a model onto the GPU or CPU, ready for Upscale Image, Inpaint and Model In
 |---|---|---|---|
 | `model` | inlet | `haybale-models:type:MODEL_REF` | Model to load: a catalog entry or a file |
 | `status.loaded` | config | `haywire-core:type:STRING` | Architecture, scale, channels, device and precision of the loaded model |
-| `loaded` | outlet | `haybale-spandrel:type:MODEL` | The loaded model, for Upscale Image, Inpaint and Model Info |
+| `loaded` | outlet | `haywire-core:type:ADD` | Connect it to the node that runs the model; it takes that node's kind of model |
 
 ## Settings
 
@@ -38,3 +38,9 @@ the file (`.pth`, `.safetensors`, `.ckpt`, `.pt`).
 Both default to the library's *Spandrel* settings. Load Model nodes that pick
 the same model with the same device and precision share one loaded copy. The
 model is loaded when the graph runs and freed when it stops.
+
+Connect the `Model` outlet first: it takes the kind of model the node it feeds
+needs (an image model for Upscale Image, an inpainting model for Inpaint), and
+the picker then offers only models of that kind. The outlet keeps its kind until
+the node is reset. A model of another kind, picked as a file, is reported when
+it loads.

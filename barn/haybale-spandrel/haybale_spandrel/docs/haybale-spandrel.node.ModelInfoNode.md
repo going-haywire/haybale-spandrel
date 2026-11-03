@@ -8,7 +8,7 @@ Tells what a loaded model is: architecture, purpose, scale, channels, device and
 
 | id | direction | type | description |
 |---|---|---|---|
-| `model` | inlet | `haybale-spandrel:type:MODEL` | Loaded model to describe |
+| `model` | inlet | `haybale-spandrel:type:MODEL_BASE` | Loaded model to describe |
 | `architecture` | outlet | `haywire-core:type:STRING` | Architecture name, such as ESRGAN |
 | `purpose` | outlet | `haywire-core:type:STRING` | What the model does, such as SR or Inpainting |
 | `scale` | outlet | `haywire-core:type:INT` | Upscale factor; 1 for restoration |

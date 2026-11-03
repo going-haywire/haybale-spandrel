@@ -153,6 +153,16 @@ def add_node(graph: Any, module: str, name: str) -> Any:
     return wrapper.node
 
 
+def add_loader(
+    graph: Any, feeds: tuple[str, str] = ("haybale_spandrel.nodes.model_info", "ModelInfoNode")
+) -> Any:
+    """Place a Load Model in *graph* with its outlet wired to a new *feeds* node, which sets its kind."""
+    load = add_node(graph, "haybale_spandrel.nodes.load_model", "LoadModelNode")
+    consumer = add_node(graph, *feeds)
+    graph.create_edge_wrapper(load.node_id, "loaded", consumer.node_id, "model")
+    return load
+
+
 def run_from(graph: Any, entry: Any) -> None:
     """Assemble *graph* and run the flow that starts at the event node *entry*, startup to shutdown."""
     import threading

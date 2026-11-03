@@ -9,7 +9,7 @@ Enlarges or restores an image with a loaded model
 | id | direction | type | description |
 |---|---|---|---|
 | `image` | inlet | `haybale-image:type:IMAGE` | Image to process |
-| `model` | inlet | `haybale-spandrel:type:MODEL` | A loaded image-to-image model |
+| `model` | inlet | `haybale-spandrel:type:IMAGE_MODEL` | A loaded image-to-image model |
 | `scale` | inlet | `haywire-core:type:FLOAT` | Size of the result relative to the input; 0 is the model's own scale |
 | `tile_size` | config | `haywire-core:type:STRING` | Tile edge in pixels; auto fits the memory, none runs the whole image at once |
 | `alpha` | config | `haywire-core:type:STRING` | Alpha channel: resize scales it smoothly, model runs it through the model |

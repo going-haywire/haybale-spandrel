@@ -80,10 +80,10 @@ class UpscaleImageNode(BaseNode):
         from haywire.barn.builtin.types import FLOAT, STRING
         from haywire.barn.builtin.widgets import SelectWidget
 
-        from haybale_spandrel.types.model import MODEL
+        from haybale_spandrel.types.model import IMAGE_MODEL
 
         self.add(IMAGE.as_inlet("image", label="Image", description="Image to process"))
-        self.add(MODEL.as_inlet("model", label="Model", description="A loaded image-to-image model"))
+        self.add(IMAGE_MODEL.as_inlet("model", label="Model", description="A loaded image-to-image model"))
         self.add(
             FLOAT.as_inlet(
                 "scale",

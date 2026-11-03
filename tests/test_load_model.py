@@ -11,7 +11,7 @@ import pytest
 import torch
 from haywire.core.volumes import VolumeStore
 
-from tests.conftest import add_node, place_model, run_from
+from tests.conftest import add_loader, add_node, place_model, run_from
 
 pytestmark = pytest.mark.integration
 
@@ -83,7 +83,7 @@ def test_same_model_and_settings_share_one_load(
     graph: Any, models_env: VolumeStore, tiny_sr_path: Path
 ) -> None:
     ref = place_model(tiny_sr_path)
-    a, b = add_node(graph, *LOAD), add_node(graph, *LOAD)
+    a, b = add_loader(graph), add_loader(graph)
     for n in (a, b):
         n.ports["model"].set_value(ref)
         n._execute(MagicMock())
@@ -101,7 +101,7 @@ def test_same_model_and_settings_share_one_load(
 def test_changing_the_model_releases_the_old_one(
     graph: Any, models_env: VolumeStore, tiny_sr_path: Path, tiny_sr4_path: Path
 ) -> None:
-    load = add_node(graph, *LOAD)
+    load = add_loader(graph)
     load.ports["model"].set_value(place_model(tiny_sr_path))
     load._execute(MagicMock())
     first_key = _pool().entries()[0].key
@@ -119,7 +119,7 @@ def test_changing_the_model_releases_the_old_one(
 def test_unavailable_device_runs_on_cpu_with_a_warning(
     graph: Any, models_env: VolumeStore, tiny_sr_path: Path
 ) -> None:
-    load = add_node(graph, *LOAD)
+    load = add_loader(graph)
     load.settings.device = "cuda:1"
     load.ports["model"].set_value(place_model(tiny_sr_path))
     load._execute(MagicMock())
@@ -135,7 +135,7 @@ def test_missing_model_is_an_error_with_a_warning(graph: Any, models_env: Volume
     from haybale_models.consumer import ModelMissing
     from haybale_models.value.model_ref import ModelRef
 
-    load = add_node(graph, *LOAD)
+    load = add_loader(graph)
     load.ports["model"].set_value(ModelRef(sha256="0" * 64, size=1))
     with pytest.raises(ModelMissing):
         load._execute(MagicMock())
@@ -157,7 +157,7 @@ def test_a_released_model_still_runs_for_whoever_holds_it(
 
     from haybale_spandrel.runtime.upscale import upscale_image
 
-    load = add_node(graph, *LOAD)
+    load = add_loader(graph)
     load.ports["model"].set_value(place_model(tiny_sr_path))
     load._execute(MagicMock())
     held = load.ports["loaded"].get_value()
@@ -173,7 +173,7 @@ def test_a_released_model_still_runs_for_whoever_holds_it(
 def test_changing_precision_loads_the_model_again(
     graph: Any, models_env: VolumeStore, tiny_sr_path: Path
 ) -> None:
-    load = add_node(graph, *LOAD)
+    load = add_loader(graph)
     load.ports["model"].set_value(place_model(tiny_sr_path))
     load._execute(MagicMock())
     assert load.ports["loaded"].get_value().dtype == torch.float32
@@ -183,3 +183,114 @@ def test_changing_precision_loads_the_model_again(
     assert load.ports["loaded"].get_value().dtype == torch.float16
     assert load.status.loaded.endswith("cpu fp16")
     assert [e.key[1] for e in _pool().entries()] == [("cpu", "fp16")]
+
+
+# ---------------------------------------------------------------- the outlet takes its kind
+
+
+UPSCALE = ("haybale_spandrel.nodes.upscale_image", "UpscaleImageNode")
+INPAINT = ("haybale_spandrel.nodes.inpaint", "InpaintNode")
+
+
+def _kind(load: Any) -> str:
+    return load.ports["loaded"].type_cls.__name__
+
+
+def _picker(load: Any) -> dict[str, Any]:
+    return load.ports["model"].widget_config["properties"]
+
+
+def test_a_new_loader_has_an_open_outlet_and_no_picker(graph: Any) -> None:
+    load = add_node(graph, *LOAD)
+
+    assert _kind(load) == "ADD"
+    assert _picker(load)["unavailable"]
+
+
+def test_the_outlet_takes_the_kind_its_consumer_needs(graph: Any) -> None:
+    load = add_loader(graph, feeds=UPSCALE)
+
+    assert _kind(load) == "IMAGE_MODEL"
+    assert _picker(load)["filter"] == {"purpose": ["SR", "FaceSR", "Restoration"]}
+    assert "unavailable" not in _picker(load)
+
+
+def test_the_picker_keeps_a_model_set_before_the_outlet_was_connected(
+    graph: Any, models_env: VolumeStore, tiny_sr_path: Path
+) -> None:
+    load = add_node(graph, *LOAD)
+    ref = place_model(tiny_sr_path)
+    load.ports["model"].set_value(ref)
+    upscale = add_node(graph, *UPSCALE)
+
+    graph.create_edge_wrapper(load.node_id, "loaded", upscale.node_id, "model")
+
+    assert load.ports["model"].get_value() == ref
+
+
+def test_model_info_takes_any_kind_and_filters_nothing(graph: Any) -> None:
+    load = add_loader(graph)
+
+    assert _kind(load) == "MODEL_BASE"
+    assert _picker(load)["filter"] == {}
+    assert "unavailable" not in _picker(load)
+
+
+def test_the_outlet_keeps_its_kind_when_unwired_and_rewired(graph: Any) -> None:
+    load = add_loader(graph, feeds=UPSCALE)
+    (edge_id,) = list(load.ports["loaded"].outgoing.linked)
+    graph.remove_edge_wrapper(edge_id)
+    inpaint = add_node(graph, *INPAINT)
+
+    graph.create_edge_wrapper(load.node_id, "loaded", inpaint.node_id, "model")
+
+    assert _kind(load) == "IMAGE_MODEL"
+
+
+def test_a_non_model_inlet_leaves_an_invalid_edge(graph: Any) -> None:
+    load = add_node(graph, *LOAD)
+    printer = add_node(graph, "haybale_core.nodes.print", "PrintNode")
+
+    edge = graph.create_edge_wrapper(load.node_id, "loaded", printer.node_id, "message")
+    graph.force_validation()
+
+    assert _kind(load) == "MODEL_BASE"
+    assert not edge.is_valid()
+
+
+@pytest.mark.usefixtures("cpu_only")
+def test_a_model_of_another_kind_is_an_error_when_it_loads(
+    graph: Any, models_env: VolumeStore, tiny_sr_path: Path
+) -> None:
+    load = add_loader(graph, feeds=INPAINT)
+    load.ports["model"].set_value(place_model(tiny_sr_path))
+
+    with pytest.raises(ValueError, match=r"does not fit this outlet \(inpainting model\)"):
+        load.worker(MagicMock(), load.ports["model"].get_value())
+
+    assert _pool().entries() == []
+
+
+def test_wiring_the_outlet_into_an_image_inlet_is_invalid_in_the_studio_scheduler(
+    library_system: Any,
+) -> None:
+    """The studio validates on a timer; the edge must still be rebuilt for the outlet's new kind."""
+    from haywire.core.graph.base import BaseGraph
+    from haywire.core.graph.scheduler import ThreadingTimerScheduler
+
+    graph = BaseGraph(
+        filestem="g", validation_scheduler=ThreadingTimerScheduler(), validation_delay_ms=60_000
+    )
+    try:
+        load = add_node(graph, *LOAD)
+        upscale = add_node(graph, *UPSCALE)
+        graph._validation.force_immediate_validation()
+
+        to_image = graph.create_edge_wrapper(load.node_id, "loaded", upscale.node_id, "image")
+        graph._validation.force_immediate_validation()
+
+        assert _kind(load) == "MODEL_BASE"
+        assert not to_image.is_valid()
+    finally:
+        graph._validation.clear()
+        graph.cleanup()

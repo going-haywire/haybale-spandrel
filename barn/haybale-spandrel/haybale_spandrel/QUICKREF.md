@@ -7,7 +7,9 @@
 - `haybale-spandrel:node:UpscaleImageNode` — Upscale Image — Enlarges or restores an image with a loaded model  _tags: upscale, super resolution, sr, enlarge, restore, esrgan, model, spandrel_
 
 ## type
-- `haybale-spandrel:type:MODEL` — Loaded model — A model loaded on a device, ready to run. Never saved with the graph.
+- `haybale-spandrel:type:IMAGE_MODEL` — Image model — A loaded image-to-image model: upscaling and restoration
+- `haybale-spandrel:type:INPAINT_MODEL` — Inpainting model — A loaded model that fills a masked part of an image
+- `haybale-spandrel:type:MODEL_BASE` — Loaded model — A model loaded on a device, ready to run. Never saved with the graph.
 
 ## setting
 - `haybale-spandrel:setting:SpandrelSettings` — Spandrel — Device, precision and memory for models

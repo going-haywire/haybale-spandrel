@@ -35,9 +35,9 @@ class ModelInfoNode(BaseNode):
     def init(self) -> None:
         from haywire.barn.builtin.types import BOOL, INT, STRING
 
-        from haybale_spandrel.types.model import MODEL
+        from haybale_spandrel.types.model import MODEL_BASE
 
-        self.add(MODEL.as_inlet("model", label="Model", description="Loaded model to describe"))
+        self.add(MODEL_BASE.as_inlet("model", label="Model", description="Loaded model to describe"))
         self.add(
             STRING.as_outlet(
                 "architecture", label="Architecture", description="Architecture name, such as ESRGAN"

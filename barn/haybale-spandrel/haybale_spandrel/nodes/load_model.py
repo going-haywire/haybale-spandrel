@@ -28,6 +28,9 @@ NOT_LOADED = "< shows after the first run >"
 #: Variants Load Model prefers from a catalog entry: PyTorch weights, safetensors first.
 PREFER = [{"platform": "pytorch", "type": "safetensors"}, {"platform": "pytorch"}]
 
+#: The picker's tooltip while the outlet has no kind yet.
+UNAVAILABLE = "Connect the Model outlet to choose a model"
+
 
 class LoadModelSettings(NodeSettings):
     """Device and precision of one Load Model node."""
@@ -73,31 +76,81 @@ class LoadModelNode(BaseNode):
     Both default to the library's *Spandrel* settings. Load Model nodes that pick
     the same model with the same device and precision share one loaded copy. The
     model is loaded when the graph runs and freed when it stops.
+
+    Connect the `Model` outlet first: it takes the kind of model the node it feeds
+    needs (an image model for Upscale Image, an inpainting model for Inpaint), and
+    the picker then offers only models of that kind. The outlet keeps its kind until
+    the node is reset. A model of another kind, picked as a file, is reported when
+    it loads.
     """
 
     settings = bag(LoadModelSettings)
     status = bag(LoadModelStatus)
 
     def init(self) -> None:
+        from haywire.barn.builtin.types import ADD
+
+        self._add_model_inlet(None)
+        self.add(
+            ADD.as_outlet(
+                "loaded",
+                label="Model",
+                description="Connect it to the node that runs the model; it takes that node's kind of model",
+                on_connect="_on_outlet_connected",
+            )
+        )
+
+    def _on_outlet_connected(self, port: Any, edge_wrapper: Any) -> None:
+        """Give the open outlet the kind of model the connected inlet takes, once.
+
+        An inlet outside the model family makes it ``MODEL_BASE``, so that edge shows as
+        invalid instead of carrying a model where none fits.
+        """
+        from haywire.barn.builtin.types import ADD
+
+        from haybale_spandrel.types.model import MODEL_BASE
+
+        if port.type_cls is not ADD:
+            return
+        sink = edge_wrapper._inlet_port.stored_type
+        kind = sink if isinstance(sink, type) and issubclass(sink, MODEL_BASE) else MODEL_BASE
+        with self.rejig(include=[port.id, "model"]):
+            self._add_model_inlet(kind)
+            self.add(
+                kind.as_outlet(
+                    port.id,
+                    label="Model",
+                    description=f"The loaded model: {kind.class_identity.label.lower()}",
+                    on_connect="_on_outlet_connected",
+                )
+            )
+        self.wrapper.redraw()
+
+    def _add_model_inlet(self, kind: Any) -> None:
+        """Add the model picker: unavailable while *kind* is ``None``, else filtered to models of *kind*."""
         from haybale_models.types.model_ref import MODEL_REF
 
-        from haybale_spandrel.types.model import MODEL
-
+        properties: dict[str, Any] = {
+            "filter": dict(getattr(kind, "catalog_filter", None) or {}),
+            "prefer": PREFER,
+        }
+        if kind is None:
+            properties["unavailable"] = UNAVAILABLE
         self.add(
             MODEL_REF.as_inlet(
                 "model",
                 label="Model",
-                widget_config={"properties": {"filter": {}, "prefer": PREFER}},
+                widget_config={"properties": properties},
                 description="Model to load: a catalog entry or a file",
             )
         )
-        self.add(
-            MODEL.as_outlet(
-                "loaded",
-                label="Model",
-                description="The loaded model, for Upscale Image, Inpaint and Model Info",
-            )
-        )
+
+    def _outlet_kind(self) -> Any:
+        """The model type the outlet resolved to, or ``None`` while it is open."""
+        from haybale_spandrel.types.model import MODEL_BASE
+
+        kind = self.ports["loaded"].type_cls
+        return kind if isinstance(kind, type) and issubclass(kind, MODEL_BASE) else None
 
     def post_init(self) -> None:
         self.settings._subscribe(self._on_settings_changed)
@@ -107,6 +160,9 @@ class LoadModelNode(BaseNode):
         self.run_again()
 
     def worker(self, context: ExecutionContext, model: ModelRef) -> None:
+        kind = self._outlet_kind()
+        if kind is None:
+            raise ValueError("connect the Model outlet first: it decides which kind of model to load")
         device, device_note = resolve_device(str(self.settings.device))
         precision = str(self.settings.precision)
         try:
@@ -124,6 +180,12 @@ class LoadModelNode(BaseNode):
             release=release_model,
         )
         self.cache.key = key
+        if not kind.fits(loaded):
+            self._let_go()
+            raise ValueError(
+                f"{loaded.name} is a {loaded.purpose} model, which does not fit this outlet "
+                f"({kind.class_identity.label.lower()})"
+            )
         notes = ([device_note] if device_note else []) + list(loaded.notes)
         self.wrapper.replace_warnings(KIND, [NodeWarning(n, source_version=None, kind=KIND) for n in notes])
         self.status.loaded = loaded.status()

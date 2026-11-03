@@ -13,7 +13,7 @@ import torch
 from haybale_image.value import ImageValue, Layout
 from haywire.core.volumes import VolumeStore
 
-from tests.conftest import add_node, place_model, run_from
+from tests.conftest import add_loader, add_node, place_model, run_from
 
 pytestmark = pytest.mark.integration
 
@@ -76,7 +76,7 @@ def test_tiled_equals_whole(graph: Any, models_env: VolumeStore, tiny_sr_path: P
 
 
 def _with_model(graph: Any, model_path: Path) -> tuple[Any, Any]:
-    load = add_node(graph, *LOAD)
+    load = add_loader(graph, feeds=UPSCALE)
     load.ports["model"].set_value(place_model(model_path))
     load._execute(MagicMock())
     upscale = add_node(graph, *UPSCALE)
@@ -128,7 +128,7 @@ def test_colour_into_gray_model_warns(graph: Any, models_env: VolumeStore, tiny_
 
 @pytest.mark.slow
 def test_inpaint_node(graph: Any, models_env: VolumeStore, lama_path: Path) -> None:
-    load = add_node(graph, *LOAD)
+    load = add_loader(graph, feeds=INPAINT)
     load.ports["model"].set_value(place_model(lama_path))
     load._execute(MagicMock())
     inpaint = add_node(graph, *INPAINT)

@@ -1,4 +1,4 @@
-"""Loading model files onto a device, and the MODEL type."""
+"""Loading model files onto a device, and the model types."""
 
 from __future__ import annotations
 
@@ -62,8 +62,8 @@ def test_gray_model_reports_gray(tiny_gray_path: Path) -> None:
 
 @pytest.mark.integration
 def test_model_type_never_serializes(library_system: Any, tiny_sr_path: Path) -> None:
-    MODEL = importlib.import_module("haybale_spandrel.types.model").MODEL
-    value = MODEL(load_model(tiny_sr_path, CPU, "auto"))
+    MODEL_BASE = importlib.import_module("haybale_spandrel.types.model").MODEL_BASE
+    value = MODEL_BASE(load_model(tiny_sr_path, CPU, "auto"))
     assert value.to_dict() == {"value": {}}
-    assert MODEL.from_dict({"value": {}}) is None
-    assert MODEL().value is None
+    assert MODEL_BASE.from_dict({"value": {}}) is None
+    assert MODEL_BASE().value is None
