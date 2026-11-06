@@ -2,6 +2,7 @@
     "name": "RealESRGAN_x2Plus",
     "author": "xinntao",
     "license": "BSD-3-Clause",
+    "commercial": true,
     "tags": [
         "compression-removal",
         "general-upscaler",

@@ -2,6 +2,7 @@
     "name": "RealESR General x4 v3",
     "author": "xinntao",
     "license": "BSD-3-Clause",
+    "commercial": true,
     "tags": [
         "compression-removal",
         "general-upscaler",
