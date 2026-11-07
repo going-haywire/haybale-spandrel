@@ -1,6 +1,6 @@
 # Haybale Spandrel
 
-A haywire project.
+Upscale and restore images in [haywire](https://github.com/going-haywire/haywire) graphs with PyTorch models, using [spandrel](https://github.com/chaiNNer-org/spandrel).
 
 ## Subscribe
 
@@ -16,12 +16,13 @@ A haywire project.
 uv sync
 uv run haywire
 ```
-## Share your library
 
-this will bump all the files to the specified version, commit, and sets the git-tag
-then it generates and saves the marketstall.toml file and updates the above
-subscribe link with the url to get this library. The version can be an explicit
-`x.y.z` or an npm-style `major`/`minor`/`patch` keyword.
+Development links the framework through `../haywire-repo`, so that checkout has to sit next to this one.
+
+## Share the library
+
+This bumps the version, regenerates the docs and `marketstall.toml`, commits, tags and pushes. The tag starts `.github/workflows/publish.yml`, which builds the wheel and publishes it to PyPI.
+
 ```sh
-uv run haywire share --bump patch --save
+uv run haywire share --bump patch|minor|major
 ```

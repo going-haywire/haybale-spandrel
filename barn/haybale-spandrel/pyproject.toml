@@ -9,19 +9,26 @@ keywords = ["image", "models", "upscale", "torch"]  # from haybale.tags
 version = "0.0.1"
 
 # ── authored here ────────────────────────────────────────────────────────────
+readme = "README.md"
 requires-python = ">=3.12"
 license = {text = "MIT"}
+authors = [{name = "maybites"}]
 
 # CANON — pip requirements. Add third-party packages and sibling haybales here.
 dependencies = [
-    "haywire-core>=0.3.0",
-    "haybale-core>=0.3.0",
-    "haybale-image>=0.3.0",
-    "haybale-models>=0.3.0",
+    "haywire-core>=0.3.3",
+    "haybale-core>=0.3.3",
+    "haybale-image>=0.3.3",
+    "haybale-models>=0.3.3",
     "spandrel>=0.4.2",
     "spandrel_extra_arches>=0.2.0",
     "torch",
 ]
+
+[project.urls]
+Homepage = "https://github.com/going-haywire/haybale-spandrel"
+Issues = "https://github.com/going-haywire/haybale-spandrel/issues"
+Source = "https://github.com/going-haywire/haybale-spandrel"
 
 # The key is the entry-point name (unique within the group; need not match the
 # library id). The value is <module>:<class>.
@@ -36,3 +43,6 @@ build-backend = "hatchling.build"
 # reaches the wheel, including haybale.toml — do not add include/exclude here.
 [tool.hatch.build.targets.wheel]
 packages = ["haybale_spandrel"]
+
+[tool.hatch.build.targets.sdist]
+include = ["haybale_spandrel/", "README.md"]

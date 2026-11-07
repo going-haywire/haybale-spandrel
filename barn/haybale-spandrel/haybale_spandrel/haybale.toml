@@ -30,14 +30,16 @@ linked_libraries = ["haybale_models", "haybale_image"]
 notes = "NOTES.md"
 
 # ── absolute URLs, used verbatim ─────────────────────────────────────────────
-# homepage_url = "https://example.com"
+origin = "https://github.com/going-haywire/haybale-spandrel"
+origin_provider = "github"
+homepage_url = "https://github.com/going-haywire/haybale-spandrel"
 # documentation_url = "https://example.com/docs/"
-# issues_url = "https://example.com/issues"
+issues_url = "https://github.com/going-haywire/haybale-spandrel/issues"
 
 # Repeatable; url is optional. Written by the studio's library overview edit modal.
-# [[authors]]
-# name = "Your Name"
-# url = "https://your.site"
+[[authors]]
+name = "maybites"
+url = "https://github.com/maybites"
 
 # Omitted unless the library is being retired — hand-edited, no edit-modal field.
 # [deprecated]

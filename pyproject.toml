@@ -8,23 +8,23 @@ dependencies = [ "haywire-studio>=0.3.0", "haybale-studio>=0.3.0", "haybale-mark
 members = [ "barn/*",]
 
 [tool.uv.sources.haywire-studio]
-path = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/packages/haywire-studio"
+path = "../haywire-repo/packages/haywire-studio"
 editable = true
 
 [tool.uv.sources.haywire-core]
-path = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/packages/haywire-core"
+path = "../haywire-repo/packages/haywire-core"
 editable = true
 
 [tool.uv.sources.haybale-core]
-path = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-core"
+path = "../haywire-repo/barn/haybale-core"
 editable = true
 
 [tool.uv.sources.haybale-studio]
-path = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-studio"
+path = "../haywire-repo/barn/haybale-studio"
 editable = true
 
 [tool.uv.sources.haybale-marketplace]
-path = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-marketplace"
+path = "../haywire-repo/barn/haybale-marketplace"
 editable = true
 
 [tool.uv.sources.haybale-spandrel]
@@ -32,15 +32,15 @@ workspace = true
 
 
 [tool.uv.sources.haybale-image]
-path = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-image"
+path = "../haywire-repo/barn/haybale-image"
 editable = true
 
 [tool.uv.sources.haybale-models]
-path = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-models"
+path = "../haywire-repo/barn/haybale-models"
 editable = true
 
 [tool.uv.sources.haybale-graph-editor]
-path = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-graph-editor"
+path = "../haywire-repo/barn/haybale-graph-editor"
 editable = true
 
 [dependency-groups]
@@ -68,3 +68,10 @@ markers = [
 ]
 addopts = "--strict-markers --tb=short"
 timeout = 120
+
+[tool.haywire.marketstall]
+# This project publishes released wheels to PyPI, so every marketstall row
+# carries `haybale-spandrel==<version>` rather than a git clone spec.
+# One coordinate per version: a PyPI row and a git row of the same name read
+# as two different libraries to a subscriber.
+distribute = "pypi"

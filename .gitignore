@@ -34,6 +34,8 @@ htmlcov/
 
 # Haywire per-session UI state (open graph, pan/zoom) — not project state
 .haywire/workspace_state.json
+# Machine-local library paths, rewritten by the studio
+.haywire/marketplace.toml
 
 # ── Before you add a pattern ────────────────────────────────────────────────
 # Anything ignored inside barn/<your-library>/ will be MISSING for everyone who

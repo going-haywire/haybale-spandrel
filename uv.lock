@@ -719,8 +719,8 @@ wheels = [
 
 [[package]]
 name = "haybale-core"
-version = "0.3.0"
-source = { editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-core" }
+version = "0.3.3"
+source = { editable = "../haywire-repo/barn/haybale-core" }
 dependencies = [
     { name = "haywire-core" },
     { name = "typing-extensions" },
@@ -734,8 +734,8 @@ requires-dist = [
 
 [[package]]
 name = "haybale-graph-editor"
-version = "0.3.0"
-source = { editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-graph-editor" }
+version = "0.3.3"
+source = { editable = "../haywire-repo/barn/haybale-graph-editor" }
 dependencies = [
     { name = "haywire-core" },
     { name = "nicegui" },
@@ -749,8 +749,8 @@ requires-dist = [
 
 [[package]]
 name = "haybale-image"
-version = "0.3.0"
-source = { editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-image" }
+version = "0.3.3"
+source = { editable = "../haywire-repo/barn/haybale-image" }
 dependencies = [
     { name = "haywire-core" },
     { name = "numpy" },
@@ -770,8 +770,8 @@ provides-extras = ["torch"]
 
 [[package]]
 name = "haybale-marketplace"
-version = "0.3.0"
-source = { editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-marketplace" }
+version = "0.3.3"
+source = { editable = "../haywire-repo/barn/haybale-marketplace" }
 dependencies = [
     { name = "haybale-studio" },
     { name = "haywire-core" },
@@ -789,8 +789,8 @@ requires-dist = [
 
 [[package]]
 name = "haybale-models"
-version = "0.3.0"
-source = { editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-models" }
+version = "0.3.3"
+source = { editable = "../haywire-repo/barn/haybale-models" }
 dependencies = [
     { name = "haybale-graph-editor" },
     { name = "haywire-core" },
@@ -803,7 +803,7 @@ requires-dist = [
     { name = "haybale-graph-editor", editable = "../haywire-repo/barn/haybale-graph-editor" },
     { name = "haywire-core", editable = "../haywire-repo/packages/haywire-core" },
     { name = "httpx", specifier = ">=0.28" },
-    { name = "huggingface-hub", specifier = ">=1.0" },
+    { name = "huggingface-hub", specifier = ">=2.4" },
 ]
 
 [[package]]
@@ -822,10 +822,10 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "haybale-core", editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-core" },
-    { name = "haybale-image", editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-image" },
-    { name = "haybale-models", editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-models" },
-    { name = "haywire-core", editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/packages/haywire-core" },
+    { name = "haybale-core", editable = "../haywire-repo/barn/haybale-core" },
+    { name = "haybale-image", editable = "../haywire-repo/barn/haybale-image" },
+    { name = "haybale-models", editable = "../haywire-repo/barn/haybale-models" },
+    { name = "haywire-core", editable = "../haywire-repo/packages/haywire-core" },
     { name = "spandrel", specifier = ">=0.4.2" },
     { name = "spandrel-extra-arches", specifier = ">=0.2.0" },
     { name = "torch" },
@@ -856,14 +856,14 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "haybale-core", editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-core" },
-    { name = "haybale-graph-editor", editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-graph-editor" },
-    { name = "haybale-image", editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-image" },
-    { name = "haybale-marketplace", editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-marketplace" },
-    { name = "haybale-models", editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-models" },
+    { name = "haybale-core", editable = "../haywire-repo/barn/haybale-core" },
+    { name = "haybale-graph-editor", editable = "../haywire-repo/barn/haybale-graph-editor" },
+    { name = "haybale-image", editable = "../haywire-repo/barn/haybale-image" },
+    { name = "haybale-marketplace", editable = "../haywire-repo/barn/haybale-marketplace" },
+    { name = "haybale-models", editable = "../haywire-repo/barn/haybale-models" },
     { name = "haybale-spandrel", editable = "barn/haybale-spandrel" },
-    { name = "haybale-studio", editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-studio" },
-    { name = "haywire-studio", editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/packages/haywire-studio" },
+    { name = "haybale-studio", editable = "../haywire-repo/barn/haybale-studio" },
+    { name = "haywire-studio", editable = "../haywire-repo/packages/haywire-studio" },
 ]
 
 [package.metadata.requires-dev]
@@ -876,8 +876,8 @@ dev = [
 
 [[package]]
 name = "haybale-studio"
-version = "0.3.0"
-source = { editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/barn/haybale-studio" }
+version = "0.3.3"
+source = { editable = "../haywire-repo/barn/haybale-studio" }
 dependencies = [
     { name = "haywire-core" },
     { name = "haywire-studio" },
@@ -893,8 +893,8 @@ requires-dist = [
 
 [[package]]
 name = "haywire-core"
-version = "0.3.0"
-source = { editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/packages/haywire-core" }
+version = "0.3.3"
+source = { editable = "../haywire-repo/packages/haywire-core" }
 dependencies = [
     { name = "attrs" },
     { name = "cattrs" },
@@ -928,8 +928,8 @@ requires-dist = [
 
 [[package]]
 name = "haywire-studio"
-version = "0.3.0"
-source = { editable = "/Volumes/Ddrive/06_open_tracking_tool/haywire/haywire-repo/packages/haywire-studio" }
+version = "0.3.3"
+source = { editable = "../haywire-repo/packages/haywire-studio" }
 dependencies = [
     { name = "cryptography" },
     { name = "fastapi" },
