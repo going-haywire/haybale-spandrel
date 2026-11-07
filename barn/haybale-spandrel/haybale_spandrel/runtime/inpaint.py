@@ -17,7 +17,7 @@ def inpaint_image(
     """Fill the parts of *image* that *mask* marks, and return the result on the model's device.
 
     The whole image runs at once. An alpha channel is kept as it was; a gray image
-    comes back gray.
+    comes back gray. The fields on *image* carry over to the result.
 
     Args:
         image: The picture to fill.
@@ -55,4 +55,5 @@ def inpaint_image(
         if alpha is not None:
             out = torch.cat([out, alpha], 1)
     # A clone outside inference mode: later in-place conversions refuse inference tensors.
-    return image.derive(ImageValue.from_tensor(out.clone(), source_depth=image.source_depth))
+    result = ImageValue.from_tensor(out.clone(), source_depth=image.source_depth)
+    return image.derive(result).with_fields(image.fields)

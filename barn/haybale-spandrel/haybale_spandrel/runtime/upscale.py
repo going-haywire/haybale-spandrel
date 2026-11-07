@@ -36,7 +36,7 @@ def upscale_image(
 
     The result keeps the input's layout: a gray image through a colour model comes back
     gray; a colour image through a gray model comes back gray, with a note. It stays on
-    the model's device.
+    the model's device. The fields on *image* carry over to the result.
 
     Args:
         image: The picture to process.
@@ -102,7 +102,7 @@ def upscale_image(
         out = out.clamp(0, 1).to(model.dtype)
     # A clone outside inference mode: later in-place conversions refuse inference tensors.
     result = ImageValue.from_tensor(out.clone(), source_depth=image.source_depth)
-    return image.derive(result), notes
+    return image.derive(result).with_fields(image.fields), notes
 
 
 def _run_passes(

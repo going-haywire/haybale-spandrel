@@ -9,6 +9,7 @@ import pytest
 import torch
 import torch.nn.functional as F
 from haybale_image.value import ImageValue, Layout
+from haywire.barn.builtin.types import FLOAT
 
 from haybale_spandrel.runtime.loader import load_model
 from haybale_spandrel.runtime.upscale import upscale_image
@@ -39,6 +40,12 @@ def test_native_scale(sr2: SpandrelModel) -> None:
     assert (out.height, out.width, out.layout) == (40, 60, Layout.RGB)
     assert out.residency == "cpu"
     assert notes == []
+
+
+def test_fields_pass_through(sr2: SpandrelModel) -> None:
+    stamped = _image(20, 30, 3).stamped("camera_timestamp", 1.5, FLOAT)
+    out, _ = _run(stamped, sr2)
+    assert out.fields["camera_timestamp"].value == 1.5
 
 
 def test_scale_above_native_runs_twice_then_downsizes(sr2: SpandrelModel) -> None:

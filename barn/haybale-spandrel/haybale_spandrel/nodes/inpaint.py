@@ -24,7 +24,8 @@ class InpaintNode(BaseNode):
 
     Connect `Model` to Load Spandrel Model. White in `Mask` marks what to fill; a mask of a
     different size is stretched to the image. The whole image runs at once, and
-    transparency is kept as it was. A super-resolution model here is an error.
+    transparency is kept as it was. A super-resolution model here is an error. Fields
+    stamped on the image carry over.
     """
 
     def init(self) -> None:

@@ -8,6 +8,7 @@ import numpy as np
 import pytest
 import torch
 from haybale_image.value import ImageValue, Layout
+from haywire.barn.builtin.types import FLOAT
 
 from haybale_spandrel.runtime.inpaint import inpaint_image
 from haybale_spandrel.runtime.loader import load_model
@@ -37,6 +38,12 @@ def _mask(h: int, w: int) -> ImageValue:
 def test_fills_and_keeps_the_size(lama: SpandrelModel) -> None:
     out = inpaint_image(_image(48, 64, 3), _mask(48, 64), lama)
     assert (out.height, out.width, out.layout) == (48, 64, Layout.RGB)
+
+
+def test_fields_pass_through(lama: SpandrelModel) -> None:
+    stamped = _image(48, 64, 3).stamped("camera_timestamp", 1.5, FLOAT)
+    out = inpaint_image(stamped, _mask(48, 64), lama)
+    assert out.fields["camera_timestamp"].value == 1.5
 
 
 def test_mask_is_scaled_to_the_image(lama: SpandrelModel) -> None:

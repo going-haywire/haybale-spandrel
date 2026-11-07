@@ -70,6 +70,9 @@ class UpscaleImageNode(BaseNode):
 
     A gray image comes back gray. A colour image through a grayscale model comes
     back gray, with a note on the card.
+
+    Fields stamped on the image carry over unchanged, so a field holding a position or
+    a size in pixels no longer matches the result.
     """
 
     progress = bag(UpscaleProgress)
