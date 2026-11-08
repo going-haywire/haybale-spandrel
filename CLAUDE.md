@@ -36,12 +36,17 @@ authoritative framework knowledge is at:
 
 Never edit version numbers, `install_spec` or `marketstall.toml` by hand, and never
 tag or push a release manually. Release only with
-`uv run haywire share --bump patch|minor|major` (or an explicit `X.Y.Z`), run **from
+`uv run --frozen haywire share --bump patch|minor|major` (or an explicit `X.Y.Z`), run **from
 this repo's root** (its `.venv` links the live framework in `../haywire-repo`). The
 pipeline checks the preconditions (clean tree, `origin` reachable, on the remote's
 default branch — `master` here), bumps the versions, regenerates docs and
 `marketstall.toml`, then commits, tags `v<version>` and pushes itself. The tag starts
 `.github/workflows/publish.yml`. Use `--dry-run` first to see what it would do.
+
+`uv.lock` gotcha: a plain `uv run haywire share` re-locks and dirties `uv.lock`, which
+fails the clean-tree check. Run `git checkout uv.lock` first and always pass `--frozen`.
+The "path source leads outside the repository" refusal only applies under
+`distribute = "git"`, not `distribute = "pypi"`.
 
 Before releasing, read `../haywire-repo/docs/guides/sharing-libraries.md` (and
 `docs/architecture/sharing/share-pipeline-arch.md` if needed). If a pin needs a
