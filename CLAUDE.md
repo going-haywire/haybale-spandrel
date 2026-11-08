@@ -32,6 +32,21 @@ authoritative framework knowledge is at:
 - `../haywire-repo/.insights/` — non-obvious bugs and framework gotchas
 - `../haywire-repo/CLAUDE.md` — framework conventions (reactive props, DI, testing rules)
 
+## Releases
+
+Never edit version numbers, `install_spec` or `marketstall.toml` by hand, and never
+tag or push a release manually. Release only with
+`uv run haywire share --bump patch|minor|major` (or an explicit `X.Y.Z`), run **from
+this repo's root** (its `.venv` links the live framework in `../haywire-repo`). The
+pipeline checks the preconditions (clean tree, `origin` reachable, on the remote's
+default branch — `master` here), bumps the versions, regenerates docs and
+`marketstall.toml`, then commits, tags `v<version>` and pushes itself. The tag starts
+`.github/workflows/publish.yml`. Use `--dry-run` first to see what it would do.
+
+Before releasing, read `../haywire-repo/docs/guides/sharing-libraries.md` (and
+`docs/architecture/sharing/share-pipeline-arch.md` if needed). If a pin needs a
+framework or sibling-library version that is not released yet, stop and ask.
+
 ## This repo
 
 - Package: `haybale_spandrel` under `barn/haybale-spandrel/` (name `haybale-spandrel-dev` in dev).
