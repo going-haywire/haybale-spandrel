@@ -1,4 +1,4 @@
-# haybale-spandrel — component index (v0.0.1)
+# haybale-spandrel — component index (v0.0.2)
 
 ## node
 - `haybale-spandrel:node:InpaintNode` — Inpaint — Fills the masked part of an image with a loaded inpainting model  _tags: inpaint, fill, remove, erase, mask, lama, model, spandrel_

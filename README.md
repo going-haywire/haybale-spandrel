@@ -5,8 +5,16 @@ Upscale and restore images in [haywire](https://github.com/going-haywire/haywire
 ## Subscribe
 
 <!-- marketstall:share-url:start -->
+Always the latest (tracks the current branch):
+
 ```sh
-*Subscribe URL not yet published — it appears after the first `haywire share --bump` release (see "Share the library" in the root README).*
+https://github.com/going-haywire/haybale-spandrel/blob/master/marketstall.toml
+```
+
+Frozen to this version:
+
+```sh
+https://github.com/going-haywire/haybale-spandrel/blob/v0.0.2/marketstall.toml
 ```
 <!-- marketstall:share-url:end -->
 
