@@ -22,7 +22,7 @@ The package's metadata says "MIT", which covers only its wrapper; each architect
 Model weights carry their own licence, whichever architecture runs them: check it on the model's page.
 
 <!-- marketstall:share-url:start -->
-*Subscribe URL not yet published — run `haywire share --save` after pushing this repo to a git remote.*
+*Subscribe URL not yet published — it appears after the first `haywire share --bump` release (see "Share the library" in the root README).*
 <!-- marketstall:share-url:end -->
 
 Upscale and restore images with PyTorch models (spandrel)
