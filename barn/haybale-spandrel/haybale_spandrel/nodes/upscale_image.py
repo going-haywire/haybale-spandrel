@@ -4,11 +4,19 @@ from __future__ import annotations
 
 from haybale_image.value import ImageValue
 
-from haywire.barn.builtin.progress import ProgressSettings, progress_field
-from haywire.core.execution.execution_context import ExecutionContext
-from haywire.core.node import BaseNode, NodeType, node
-from haywire.core.node.node_warning import NodeWarning
-from haywire.core.settings import bag
+from haywire.api import (
+    FLOAT,
+    STRING,
+    BaseNode,
+    ExecutionContext,
+    NodeType,
+    NodeWarning,
+    ProgressSettings,
+    SelectWidget,
+    bag,
+    node,
+    progress_field,
+)
 
 from haybale_spandrel.runtime.devices import memory_budget_bytes
 from haybale_spandrel.runtime.tiling import Cancelled
@@ -79,9 +87,6 @@ class UpscaleImageNode(BaseNode):
 
     def init(self) -> None:
         from haybale_image.types.image import IMAGE
-
-        from haywire.barn.builtin.types import FLOAT, STRING
-        from haywire.barn.builtin.widgets import SelectWidget
 
         from haybale_spandrel.types.model import IMAGE_MODEL
 

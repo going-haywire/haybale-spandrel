@@ -7,13 +7,22 @@ from typing import Any
 from haybale_models.consumer import models_state, release_node, resolve_port
 from haybale_models.value.model_ref import ModelRef
 
-from haywire.barn.builtin.types import STRING
-from haywire.barn.builtin.widgets import SimpleLabelWidget
-from haywire.core.execution.execution_context import ExecutionContext
-from haywire.core.node import BaseNode, NodeType, node
-from haywire.core.node.node_warning import NodeWarning
-from haywire.core.settings import NodeSettings, Promotable, bag, setting, shadow
-from haywire.core.types.enums import PortType
+from haywire.api import (
+    ADD,
+    STRING,
+    BaseNode,
+    ExecutionContext,
+    NodeSettings,
+    NodeType,
+    NodeWarning,
+    PortType,
+    Promotable,
+    SimpleLabelWidget,
+    bag,
+    node,
+    setting,
+    shadow,
+)
 
 from haybale_spandrel.runtime.devices import resolve_device
 from haybale_spandrel.runtime.loader import load_model, release_model
@@ -90,8 +99,6 @@ class LoadModelNode(BaseNode):
     status = bag(LoadModelStatus)
 
     def init(self) -> None:
-        from haywire.barn.builtin.types import ADD
-
         self.add(
             ADD.as_outlet(
                 "loaded",
@@ -107,7 +114,6 @@ class LoadModelNode(BaseNode):
         An inlet outside the model family makes it ``MODEL_BASE``, so that edge shows as
         invalid instead of carrying a model where none fits.
         """
-        from haywire.barn.builtin.types import ADD
 
         from haybale_spandrel.types.model import MODEL_BASE
 
