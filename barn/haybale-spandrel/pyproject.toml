@@ -6,7 +6,7 @@ description = "Upscale and restore images with PyTorch models (spandrel)"  # fro
 keywords = ["image", "models", "upscale", "torch"]  # from haybale.tags
 
 # CANON, but owned by the release machinery — synced to haybale.toml
-version = "0.0.2"
+version = "0.0.3"
 
 # ── authored here ────────────────────────────────────────────────────────────
 readme = "README.md"
