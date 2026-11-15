@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-from haywire.core.execution.execution_context import ExecutionContext
-from haywire.core.node import BaseNode, NodeType, node
+from haywire.api import BOOL, INT, STRING, BaseNode, ExecutionContext, NodeType, node
 
 from haybale_spandrel.runtime.devices import dtype_name
 from haybale_spandrel.value.spandrel_model import SpandrelModel
@@ -35,8 +34,6 @@ class ModelInfoNode(BaseNode):
     """
 
     def init(self) -> None:
-        from haywire.barn.builtin.types import BOOL, INT, STRING
-
         from haybale_spandrel.types.model import MODEL_BASE
 
         self.add(MODEL_BASE.as_inlet("model", label="Model", description="Loaded model to describe"))

@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 import torch
 from haybale_image.value import ImageValue, Layout
-from haywire.barn.builtin.types import FLOAT
+from haywire.api import FLOAT
 
 from haybale_spandrel.runtime.inpaint import inpaint_image
 from haybale_spandrel.runtime.loader import load_model

@@ -61,7 +61,7 @@ def library_system(project_root: Path, _isolated_home: Path) -> Iterator[Any]:
 @pytest.fixture
 def graph(library_system: Any) -> Any:
     """An empty graph on the loaded library system, validating inline."""
-    from haywire.core.graph.base import BaseGraph
+    from haywire.api.workbench import BaseGraph
     from haywire.core.graph.scheduler import SyncScheduler
 
     return BaseGraph(filestem="Spandrel Test Graph", validation_scheduler=SyncScheduler())
@@ -215,9 +215,9 @@ def place_model(source: Path, name: str | None = None) -> Any:
     from haybale_models.consumer import models_state
     from haybale_models.keys import MODELS_VOLUME
     from haybale_models.value.model_ref import ModelRef
-    from haywire.core.volumes import location_of
+    from haywire.api import volume_location
 
-    target = location_of(MODELS_VOLUME) / (name or source.name)
+    target = volume_location(MODELS_VOLUME) / (name or source.name)
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(source, target)
     state = models_state()

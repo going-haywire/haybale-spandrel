@@ -9,7 +9,7 @@ import pytest
 import torch
 import torch.nn.functional as F
 from haybale_image.value import ImageValue, Layout
-from haywire.barn.builtin.types import FLOAT
+from haywire.api import FLOAT
 
 from haybale_spandrel.runtime.loader import load_model
 from haybale_spandrel.runtime.upscale import upscale_image

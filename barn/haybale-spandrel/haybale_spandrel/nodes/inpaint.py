@@ -4,8 +4,7 @@ from __future__ import annotations
 
 from haybale_image.value import ImageValue
 
-from haywire.core.execution.execution_context import ExecutionContext
-from haywire.core.node import BaseNode, NodeType, node
+from haywire.api import BaseNode, ExecutionContext, NodeType, node
 
 from haybale_spandrel.runtime.inpaint import inpaint_image
 from haybale_spandrel.runtime.tiling import Cancelled

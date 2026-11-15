@@ -1,7 +1,6 @@
 """SpandrelSettings — library-wide device, precision and memory budget for spandrel models."""
 
-from haywire.barn.builtin.types import BOOL, CHOICES, FLOAT
-from haywire.core.settings import LibrarySettings, setting, settings
+from haywire.api import BOOL, CHOICES, FLOAT, LibrarySettings, setting, settings
 
 #: Suggested devices; any other torch device name (``cuda:3``) can be typed in.
 DEVICES = ("auto", "cpu", "mps", "cuda", "cuda:0", "cuda:1")

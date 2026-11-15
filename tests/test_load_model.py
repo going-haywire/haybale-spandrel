@@ -325,7 +325,7 @@ def test_wiring_the_outlet_into_an_image_inlet_is_invalid_in_the_studio_schedule
     library_system: Any,
 ) -> None:
     """The studio validates on a timer; the edge must still be rebuilt for the outlet's new kind."""
-    from haywire.core.graph.base import BaseGraph
+    from haywire.api.workbench import BaseGraph
     from haywire.core.graph.scheduler import ThreadingTimerScheduler
 
     graph = BaseGraph(

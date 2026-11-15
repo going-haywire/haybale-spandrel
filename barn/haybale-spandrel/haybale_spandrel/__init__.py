@@ -8,16 +8,17 @@ Component folders (registered in ``register_components``):
 
 from pathlib import Path
 
-from haywire.core.library.base import BaseLibrary
-from haywire.core.library.decorator import library
-from haywire.core.catalog import CatalogRegistry
+from haywire.api import (
+    BaseLibrary,
+    CatalogRegistry,
+    MacroRegistry,
+    NodeRegistry,
+    SettingsRegistry,
+    TypeRegistry,
+    library,
+)
 
-# node before macro: haywire.core.macro imports haywire.core.node, which imports the macro registry.
-from haywire.core.node.registry import NodeRegistry
-from haywire.core.macro.registry import MacroRegistry
-from haywire.core.settings.registry import SettingsRegistry
-from haywire.core.types.registry import TypeRegistry
-from haywire.ui.panel.registry import PanelRegistry
+from haywire.api.workbench import PanelRegistry
 
 
 @library(
