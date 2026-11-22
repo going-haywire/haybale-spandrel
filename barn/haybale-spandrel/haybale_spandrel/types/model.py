@@ -1,4 +1,4 @@
-"""MODEL_BASE and its kinds: a spandrel model loaded on a device, ready to run."""
+"""LOADED_MODEL and its kinds: a spandrel model loaded on a device, ready to run."""
 
 from typing import Any, ClassVar
 
@@ -9,13 +9,13 @@ from haybale_spandrel.value.spandrel_model import SpandrelModel
 
 @type_decorator(
     wire_type=DataWire,
-    label="Loaded model",
+    label="Loaded Model",
     description="A model loaded on a device, ready to run. Never saved with the graph.",
     color="#d97ab0",
     store_strategy=StoreStrategy.NEVER,
     default={"value": {}},
 )
-class MODEL_BASE(PrimitiveType[SpandrelModel | None]):
+class LOADED_MODEL(PrimitiveType[SpandrelModel | None]):
     """A model loaded on a device in a precision, ready to run, of any kind.
 
     Spandrel Model Info takes any loaded model through it. Upscale Image and Inpaint take
@@ -48,13 +48,13 @@ class MODEL_BASE(PrimitiveType[SpandrelModel | None]):
 
 @type_decorator(
     wire_type=DataWire,
-    label="Image model",
+    label="Image Model",
     description="A loaded image-to-image model: upscaling and restoration",
     color="#d97ab0",
     store_strategy=StoreStrategy.NEVER,
     default={"value": {}},
 )
-class IMAGE_MODEL(MODEL_BASE):
+class IMAGE_MODEL(LOADED_MODEL):
     """A loaded model that turns an image into an image.
 
     Super-resolution, face super-resolution and restoration models are of this
@@ -71,13 +71,13 @@ class IMAGE_MODEL(MODEL_BASE):
 
 @type_decorator(
     wire_type=DataWire,
-    label="Inpainting model",
+    label="Inpainting Model",
     description="A loaded model that fills a masked part of an image",
     color="#c46aa0",
     store_strategy=StoreStrategy.NEVER,
     default={"value": {}},
 )
-class INPAINT_MODEL(MODEL_BASE):
+class INPAINT_MODEL(LOADED_MODEL):
     """A loaded model that fills the masked part of an image.
 
     Inpaint takes it.
@@ -107,4 +107,4 @@ def _as_model(value: Any) -> SpandrelModel | None:
     return value if isinstance(value, SpandrelModel) else None
 
 
-MODEL_BASE.field_class = MODELField
+LOADED_MODEL.field_class = MODELField

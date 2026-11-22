@@ -28,12 +28,12 @@ class InpaintNode(BaseNode):
     """
 
     def init(self) -> None:
-        from haybale_image.types.image import IMAGE, IMAGE_GRAY
+        from haybale_image.types.image import IMAGE, GRAY_IMAGE
 
         from haybale_spandrel.types.model import INPAINT_MODEL
 
         self.add(IMAGE.as_inlet("image", label="Image", description="Image to fill"))
-        self.add(IMAGE_GRAY.as_inlet("mask", label="Mask", description="White marks what to fill"))
+        self.add(GRAY_IMAGE.as_inlet("mask", label="Mask", description="White marks what to fill"))
         self.add(INPAINT_MODEL.as_inlet("model", label="Model", description="A loaded inpainting model"))
         self.add(IMAGE.as_outlet("out_image", label="Image", description="The filled image"))
 

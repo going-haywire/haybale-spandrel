@@ -17,7 +17,7 @@ from haywire.api import (
     NodeWarning,
     PortType,
     Promotable,
-    SimpleLabelWidget,
+    LabelWidget,
     bag,
     node,
     setting,
@@ -52,7 +52,7 @@ class LoadModelStatus(NodeSettings):
         NOT_LOADED,
         label="Loaded",
         description="Architecture, scale, channels, device and precision of the loaded model",
-        widget=SimpleLabelWidget.config(),
+        widget=LabelWidget.config(),
         promotable=Promotable.CONFIG,
         promote_default=PortType.CONFIG,
     )
@@ -65,7 +65,7 @@ class LoadModelStatus(NodeSettings):
     search_tags=["model", "load", "load model", "spandrel", "upscale", "esrgan", "pytorch", "torch", "gpu"],
     node_type=NodeType.DATA,
 )
-class LoadModelNode(BaseNode):
+class LoadSpandrelModelNode(BaseNode):
     """Loads a spandrel (PyTorch image) model onto the GPU or CPU, for Upscale Image or Inpaint.
 
     Connect the `Model` outlet first, to the node that runs the model: the outlet
@@ -111,16 +111,16 @@ class LoadModelNode(BaseNode):
     def _on_outlet_connected(self, port: Any, edge_wrapper: Any) -> None:
         """Give the open outlet the kind of model the connected inlet takes, once.
 
-        An inlet outside the model family makes it ``MODEL_BASE``, so that edge shows as
+        An inlet outside the model family makes it ``LOADED_MODEL``, so that edge shows as
         invalid instead of carrying a model where none fits.
         """
 
-        from haybale_spandrel.types.model import MODEL_BASE
+        from haybale_spandrel.types.model import LOADED_MODEL
 
         if port.type_cls is not ADD:
             return
         sink = edge_wrapper._inlet_port.stored_type
-        kind = sink if isinstance(sink, type) and issubclass(sink, MODEL_BASE) else MODEL_BASE
+        kind = sink if isinstance(sink, type) and issubclass(sink, LOADED_MODEL) else LOADED_MODEL
         with self.rejig(include=[port.id, "model"]):
             self._add_model_inlet(kind)
             self.add(
@@ -149,10 +149,10 @@ class LoadModelNode(BaseNode):
 
     def _outlet_kind(self) -> Any:
         """The model type the outlet resolved to, or ``None`` while it is open."""
-        from haybale_spandrel.types.model import MODEL_BASE
+        from haybale_spandrel.types.model import LOADED_MODEL
 
         kind = self.ports["loaded"].type_cls
-        return kind if isinstance(kind, type) and issubclass(kind, MODEL_BASE) else None
+        return kind if isinstance(kind, type) and issubclass(kind, LOADED_MODEL) else None
 
     def post_init(self) -> None:
         self.settings._subscribe(self._on_settings_changed)

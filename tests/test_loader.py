@@ -106,8 +106,8 @@ def test_gray_model_reports_gray(tiny_gray_path: Path) -> None:
 
 @pytest.mark.integration
 def test_model_type_never_serializes(library_system: Any, tiny_sr_path: Path) -> None:
-    MODEL_BASE = importlib.import_module("haybale_spandrel.types.model").MODEL_BASE
-    value = MODEL_BASE(load_model(tiny_sr_path, CPU, "auto"))
+    LOADED_MODEL = importlib.import_module("haybale_spandrel.types.model").LOADED_MODEL
+    value = LOADED_MODEL(load_model(tiny_sr_path, CPU, "auto"))
     assert value.to_dict() == {"value": {}}
-    assert MODEL_BASE.from_dict({"value": {}}) is None
-    assert MODEL_BASE().value is None
+    assert LOADED_MODEL.from_dict({"value": {}}) is None
+    assert LOADED_MODEL().value is None
