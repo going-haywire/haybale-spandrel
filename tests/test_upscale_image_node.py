@@ -17,7 +17,7 @@ from tests.conftest import add_loader, add_node, place_model, run_from
 
 pytestmark = pytest.mark.integration
 
-LOAD = ("haybale_spandrel.nodes.load_model", "LoadModelNode")
+LOAD = ("haybale_spandrel.nodes.load_spandrel_model", "LoadSpandrelModelNode")
 UPSCALE = ("haybale_spandrel.nodes.upscale_image", "UpscaleImageNode")
 INPAINT = ("haybale_spandrel.nodes.inpaint", "InpaintNode")
 CPU = torch.device("cpu")
@@ -36,7 +36,7 @@ def _image(h: int, w: int, channels: int = 3) -> ImageValue:
 
 def _upscale_graph(graph: Any, model_path: Path) -> tuple[Any, Any, Any]:
     """BeginPlay → Print, Print's message ← Image Info width ← Upscale ← Load Model."""
-    begin = add_node(graph, "haybale_core.nodes.events.begin_play", "BeginPlayNode")
+    begin = add_node(graph, "haybale_core.nodes.events.begin_play_event", "BeginPlayEventNode")
     printer = add_node(graph, "haybale_core.nodes.print", "PrintNode")
     info = add_node(graph, "haybale_image.nodes.image_info", "ImageInfoNode")
     load = add_node(graph, *LOAD)

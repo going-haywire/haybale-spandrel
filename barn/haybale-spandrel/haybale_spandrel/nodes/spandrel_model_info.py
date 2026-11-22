@@ -15,7 +15,7 @@ from haybale_spandrel.value.spandrel_model import SpandrelModel
     search_tags=["model", "info", "scale", "architecture", "spandrel"],
     node_type=NodeType.DATA,
 )
-class ModelInfoNode(BaseNode):
+class SpandrelModelInfoNode(BaseNode):
     """Tells what a loaded model is.
 
     - `Architecture`: the network design, e.g. `ESRGAN` or `RealESRGAN Compact`.
@@ -34,9 +34,9 @@ class ModelInfoNode(BaseNode):
     """
 
     def init(self) -> None:
-        from haybale_spandrel.types.model import MODEL_BASE
+        from haybale_spandrel.types.model import LOADED_MODEL
 
-        self.add(MODEL_BASE.as_inlet("model", label="Model", description="Loaded model to describe"))
+        self.add(LOADED_MODEL.as_inlet("model", label="Model", description="Loaded model to describe"))
         self.add(
             STRING.as_outlet(
                 "architecture", label="Architecture", description="Architecture name, such as ESRGAN"

@@ -9,7 +9,7 @@ Fills the masked part of an image with a loaded inpainting model
 | id | direction | type | description |
 |---|---|---|---|
 | `image` | inlet | `haybale-image:type:IMAGE` | Image to fill |
-| `mask` | inlet | `haybale-image:type:IMAGE_GRAY` | White marks what to fill |
+| `mask` | inlet | `haybale-image:type:GRAY_IMAGE` | White marks what to fill |
 | `model` | inlet | `haybale-spandrel:type:INPAINT_MODEL` | A loaded inpainting model |
 | `out_image` | outlet | `haybale-image:type:IMAGE` | The filled image |
 

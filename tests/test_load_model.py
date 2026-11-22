@@ -1,4 +1,4 @@
-"""Load Model and Model Info: graph runs, pool holds, device notes, release."""
+"""Load Spandrel Model and Spandrel Model Info: graph runs, pool holds, device notes, release."""
 
 from __future__ import annotations
 
@@ -15,8 +15,8 @@ from tests.conftest import add_loader, add_node, place_model, run_from
 
 pytestmark = pytest.mark.integration
 
-LOAD = ("haybale_spandrel.nodes.load_model", "LoadModelNode")
-INFO = ("haybale_spandrel.nodes.model_info", "ModelInfoNode")
+LOAD = ("haybale_spandrel.nodes.load_spandrel_model", "LoadSpandrelModelNode")
+INFO = ("haybale_spandrel.nodes.spandrel_model_info", "SpandrelModelInfoNode")
 
 
 @pytest.fixture
@@ -32,7 +32,7 @@ def _pool() -> Any:
 
 
 def _graph_with_info(graph: Any) -> tuple[Any, Any, Any]:
-    begin = add_node(graph, "haybale_core.nodes.events.begin_play", "BeginPlayNode")
+    begin = add_node(graph, "haybale_core.nodes.events.begin_play_event", "BeginPlayEventNode")
     printer = add_node(graph, "haybale_core.nodes.print", "PrintNode")
     load = add_node(graph, *LOAD)
     info = add_node(graph, *INFO)
@@ -59,7 +59,7 @@ def test_model_info_after_a_run(graph: Any, models_env: VolumeStore, tiny_sr_pat
 def test_a_second_run_loads_again(
     graph: Any, models_env: VolumeStore, tiny_sr_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    mod = importlib.import_module("haybale_spandrel.nodes.load_model")
+    mod = importlib.import_module("haybale_spandrel.nodes.load_spandrel_model")
     loads: list[Path] = []
     real = mod.load_model
 
@@ -282,7 +282,7 @@ def test_the_outlet_takes_the_kind_its_consumer_needs(graph: Any) -> None:
 def test_model_info_takes_any_kind_and_filters_nothing(graph: Any) -> None:
     load = add_loader(graph)
 
-    assert _kind(load) == "MODEL_BASE"
+    assert _kind(load) == "LOADED_MODEL"
     assert _picker(load)["filter"] == {}
 
 
@@ -304,7 +304,7 @@ def test_a_non_model_inlet_leaves_an_invalid_edge(graph: Any) -> None:
     edge = graph.create_edge_wrapper(load.node_id, "loaded", printer.node_id, "message")
     graph.force_validation()
 
-    assert _kind(load) == "MODEL_BASE"
+    assert _kind(load) == "LOADED_MODEL"
     assert not edge.is_valid()
 
 
@@ -339,7 +339,7 @@ def test_wiring_the_outlet_into_an_image_inlet_is_invalid_in_the_studio_schedule
         to_image = graph.create_edge_wrapper(load.node_id, "loaded", upscale.node_id, "image")
         graph._validation.force_immediate_validation()
 
-        assert _kind(load) == "MODEL_BASE"
+        assert _kind(load) == "LOADED_MODEL"
         assert not to_image.is_valid()
     finally:
         graph._validation.clear()

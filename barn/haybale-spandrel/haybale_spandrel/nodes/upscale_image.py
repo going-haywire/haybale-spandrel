@@ -12,7 +12,7 @@ from haywire.api import (
     NodeType,
     NodeWarning,
     ProgressSettings,
-    SelectWidget,
+    MenuWidget,
     bag,
     node,
     progress_field,
@@ -105,7 +105,7 @@ class UpscaleImageNode(BaseNode):
                 "tile_size",
                 default="auto",
                 label="Tile Size",
-                widget=SelectWidget.config(
+                widget=MenuWidget.config(
                     properties={"options": list(TILE_SIZES), "new_value_mode": "add-unique"}
                 ),
                 description="Tile edge in pixels; auto fits the memory, none runs the whole image at once",
@@ -116,7 +116,7 @@ class UpscaleImageNode(BaseNode):
                 "alpha",
                 default="resize",
                 label="Alpha",
-                widget=SelectWidget.config(properties={"options": list(ALPHA_MODES)}),
+                widget=MenuWidget.config(properties={"options": list(ALPHA_MODES)}),
                 description="Alpha channel: resize scales it smoothly, model runs it through the model",
             )
         )

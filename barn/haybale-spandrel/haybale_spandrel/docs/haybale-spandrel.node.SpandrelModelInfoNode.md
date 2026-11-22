@@ -1,6 +1,6 @@
 # Spandrel Model Info
 
-`haybale-spandrel:node:ModelInfoNode` · kind: node
+`haybale-spandrel:node:SpandrelModelInfoNode` · kind: node
 
 Tells what a loaded spandrel model is: architecture, purpose, scale, device, precision
 
@@ -8,7 +8,7 @@ Tells what a loaded spandrel model is: architecture, purpose, scale, device, pre
 
 | id | direction | type | description |
 |---|---|---|---|
-| `model` | inlet | `haybale-spandrel:type:MODEL_BASE` | Loaded model to describe |
+| `model` | inlet | `haybale-spandrel:type:LOADED_MODEL` | Loaded model to describe |
 | `architecture` | outlet | `haywire-core:type:STRING` | Architecture name, such as ESRGAN |
 | `purpose` | outlet | `haywire-core:type:STRING` | What the model does, such as SR or Inpainting |
 | `scale` | outlet | `haywire-core:type:INT` | Upscale factor; 1 for restoration |
