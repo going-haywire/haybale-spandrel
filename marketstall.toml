@@ -4,11 +4,11 @@
 [[haybales]]
 name = "haybale-spandrel"
 label = "Spandrel"
-version = "0.0.3"
-require = "haywire-core>=0.5.0"
+version = "0.0.4"
+require = "haywire-core>=0.6.0"
 description = "Upscale and restore images with PyTorch models (spandrel)"
 source = "pypi"
-install_spec = "haybale-spandrel==0.0.3"
+install_spec = "haybale-spandrel==0.0.4"
 tags = [ "image", "models", "upscale", "torch",]
 on_reload = "none"
 linked_libraries = [ "haybale_models", "haybale_image",]
