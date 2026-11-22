@@ -520,11 +520,11 @@
           },
           "array": {
             "kwargs": {
-              "registry_id": "ArrayType",
-              "registry_key": "haybale-core:type:ArrayType",
+              "registry_id": "ARRAY",
+              "registry_key": "haybale-core:type:ARRAY",
               "label": "Array",
               "description": "The items to go through",
-              "class_name": "ArrayType",
+              "class_name": "ARRAY",
               "module": "haybale_core.types.array_type",
               "default": {
                 "value": []
@@ -537,7 +537,7 @@
               "on_connect": "hb_adopt_array"
             },
             "recipe": {
-              "registry_key": "haybale-core:type:ArrayType",
+              "registry_key": "haybale-core:type:ARRAY",
               "element_type": {
                 "registry_key": "haywire-core:type:FILE_PATH"
               }
@@ -583,11 +583,11 @@
           },
           "failed": {
             "kwargs": {
-              "registry_id": "ArrayType",
-              "registry_key": "haybale-core:type:ArrayType",
+              "registry_id": "ARRAY",
+              "registry_key": "haybale-core:type:ARRAY",
               "label": "Failed",
               "description": "Items whose iteration failed",
-              "class_name": "ArrayType",
+              "class_name": "ARRAY",
               "module": "haybale_core.types.array_type",
               "default": {
                 "value": []
@@ -600,7 +600,7 @@
               "show_widget": "never"
             },
             "recipe": {
-              "registry_key": "haybale-core:type:ArrayType",
+              "registry_key": "haybale-core:type:ARRAY",
               "element_type": {
                 "registry_key": "haywire-core:type:FILE_PATH"
               }
@@ -892,11 +892,11 @@
           },
           "files": {
             "kwargs": {
-              "registry_id": "ArrayType",
-              "registry_key": "haybale-core:type:ArrayType",
+              "registry_id": "ARRAY",
+              "registry_key": "haybale-core:type:ARRAY",
               "label": "Files",
               "description": "The matching files, in name order",
-              "class_name": "ArrayType",
+              "class_name": "ARRAY",
               "module": "haybale_core.types.array_type",
               "default": {
                 "value": []
@@ -909,7 +909,7 @@
               "show_widget": "never"
             },
             "recipe": {
-              "registry_key": "haybale-core:type:ArrayType",
+              "registry_key": "haybale-core:type:ARRAY",
               "element_type": {
                 "registry_key": "haywire-core:type:FILE_PATH"
               }
@@ -1491,7 +1491,7 @@
     },
     "LoadModelNode_755562af": {
       "node_id": "LoadModelNode_755562af",
-      "registry_key": "haybale-spandrel:node:LoadModelNode",
+      "registry_key": "haybale-spandrel:node:LoadSpandrelModelNode",
       "node_data": {
         "node_id": "LoadModelNode_755562af",
         "ports": {
@@ -1603,14 +1603,14 @@
         },
         "store": {},
         "identity": {
-          "registry_id": "LoadModelNode",
-          "registry_key": "haybale-spandrel:node:LoadModelNode",
+          "registry_id": "LoadSpandrelModelNode",
+          "registry_key": "haybale-spandrel:node:LoadSpandrelModelNode",
           "label": "Load Spandrel Model",
           "description": "Loads a spandrel (PyTorch image) model onto the GPU or CPU, for Upscale Image or Inpaint",
           "deprecation_warning": "",
           "hidden": false,
-          "class_name": "LoadModelNode",
-          "module": "haybale_spandrel.nodes.load_model",
+          "class_name": "LoadSpandrelModelNode",
+          "module": "haybale_spandrel.nodes.load_spandrel_model",
           "tags": [],
           "search_tags": [
             "model",
@@ -2374,7 +2374,7 @@
               },
               "store_strategy": 4,
               "color": "#ffc107",
-              "widget_key": "haywire-core:widget:SelectWidget",
+              "widget_key": "haywire-core:widget:MenuWidget",
               "widget_config": {
                 "properties": {
                   "options": [
@@ -2413,7 +2413,7 @@
               },
               "store_strategy": 4,
               "color": "#ffc107",
-              "widget_key": "haywire-core:widget:SelectWidget",
+              "widget_key": "haywire-core:widget:MenuWidget",
               "widget_config": {
                 "properties": {
                   "options": [
