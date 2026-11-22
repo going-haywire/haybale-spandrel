@@ -15,9 +15,9 @@ Upscale and restore images with PyTorch models (spandrel)
 - **Upscaler** — 
 
 ## Types
-- **Image model** — A loaded image-to-image model: upscaling and restoration
-- **Inpainting model** — A loaded model that fills a masked part of an image
-- **Loaded model** — A model loaded on a device, ready to run. Never saved with the graph.
+- **Image Model** — A loaded image-to-image model: upscaling and restoration
+- **Inpainting Model** — A loaded model that fills a masked part of an image
+- **Loaded Model** — A model loaded on a device, ready to run. Never saved with the graph.
 
 ## Settings
 - **Spandrel** — Device, precision and memory for models

@@ -1,6 +1,6 @@
-# Loaded model
+# Loaded Model
 
-`haybale-spandrel:type:MODEL_BASE` · kind: type
+`haybale-spandrel:type:LOADED_MODEL` · kind: type
 
 A model loaded on a device, ready to run. Never saved with the graph.
 

@@ -1,4 +1,4 @@
-# Image model
+# Image Model
 
 `haybale-spandrel:type:IMAGE_MODEL` · kind: type
 

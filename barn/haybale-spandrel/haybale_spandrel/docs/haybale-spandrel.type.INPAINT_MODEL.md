@@ -1,4 +1,4 @@
-# Inpainting model
+# Inpainting Model
 
 `haybale-spandrel:type:INPAINT_MODEL` · kind: type
 

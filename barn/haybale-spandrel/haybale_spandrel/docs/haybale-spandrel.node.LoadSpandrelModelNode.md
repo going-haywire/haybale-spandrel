@@ -1,6 +1,6 @@
 # Load Spandrel Model
 
-`haybale-spandrel:node:LoadModelNode` · kind: node
+`haybale-spandrel:node:LoadSpandrelModelNode` · kind: node
 
 Loads a spandrel (PyTorch image) model onto the GPU or CPU, for Upscale Image or Inpaint
 
