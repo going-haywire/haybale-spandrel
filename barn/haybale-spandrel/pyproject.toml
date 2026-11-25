@@ -22,7 +22,8 @@ dependencies = [
     "haybale-models>=0.6.0",
     "spandrel>=0.4.2",
     "spandrel_extra_arches>=0.2.0",
-    "torch",
+    # 2.5 added torch.mps.recommended_max_memory (runtime/devices.py).
+    "torch>=2.5",
 ]
 
 [project.urls]
