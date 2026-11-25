@@ -44,7 +44,14 @@ path = "../haywire-repo/barn/haybale-graph-editor"
 editable = true
 
 [dependency-groups]
-dev = ["pytest>=8", "pytest-timeout", "ruff==0.12.12", "mypy==2.1.0"]
+dev = [
+    # Floors checked by the floors CI job (ADR 0095).
+    "pytest>=8",
+    "pytest-timeout>=2.1",
+    # Exact pins: a new ruff or mypy brings new diagnostics, so local runs and CI stay alike.
+    "ruff==0.12.12",
+    "mypy==2.1.0",
+]
 
 [tool.ruff]
 line-length = 109
